@@ -2,2397 +2,1474 @@
 <html lang="my">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#ffc107">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Basic App Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ဖိတ်ကြားလွှာ - Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f4f5f7; --card:#fff; --text:#16181d; --sub:#6b7280;
-  --main:#ffc107; --main-ink:#1a1a1a; --para:#fff;
-  --border:#e5e7eb; --modal:#fff; --overlay:rgba(15,17,21,.55);
-  --header-height:58px; --font-size:17px; --new-badge:#ff3b30;
-  --success:#22c55e; --danger:#ef4444; --radius:14px;
-  --shadow-s:0 1px 2px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.06);
-  --shadow-l:0 12px 40px rgba(0,0,0,.18);
-  --safe-top:env(safe-area-inset-top,0px);
-  --safe-bottom:env(safe-area-inset-bottom,0px);
-  --marquee-height:38px;
-}
-[data-theme="dark"]{
-  --bg:#0f1115; --card:#1a1d23; --text:#e8eaed; --sub:#9aa0a6;
-  --para:#1a1d23; --border:#2b2f38; --modal:#1f232a;
-  --overlay:rgba(0,0,0,.7);
-  --shadow-s:0 1px 3px rgba(0,0,0,.4);
-  --shadow-l:0 12px 40px rgba(0,0,0,.6);
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;outline:none}
-html,body{height:100%}
-body{
-  margin:0;padding:0;
-  font-family:'Pyidaungsu',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans Myanmar",sans-serif;
-  background:var(--bg);color:var(--text);
-  height:100dvh;overflow:hidden;display:flex;justify-content:center;
-  overscroll-behavior:none;-webkit-font-smoothing:antialiased;
-}
-button,input,select,textarea{font-family:inherit}
-#app{
-  width:100%;max-width:620px;height:100%;background:var(--card);
-  position:relative;overflow:hidden;display:flex;flex-direction:column;
-  box-shadow:0 0 40px rgba(0,0,0,.08);
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Status Bar */
-.status-bar{
-  height:22px;flex:0 0 auto;padding-top:var(--safe-top);box-sizing:content-box;
-  background:var(--bg);display:flex;align-items:center;justify-content:center;
-  font-size:10.5px;color:var(--sub);gap:6px;border-bottom:1px solid var(--border);
-}
-.status-dot{width:7px;height:7px;border-radius:50%;background:var(--sub);transition:.3s}
-.status-dot.online{background:var(--success);box-shadow:0 0 6px var(--success)}
-.status-dot.offline{background:var(--danger);box-shadow:0 0 6px var(--danger)}
+  body {
+    font-family: 'Pyidaungsu', 'Myanmar Text', sans-serif;
+    overflow-x: hidden;
+    background: #1a0f08;
+  }
 
-/* Loading */
-#loading-screen{
-  position:absolute;inset:0;background:var(--card);z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
-  transition:opacity .35s ease;
-}
-#loading-screen.hidden{opacity:0;pointer-events:none}
-.spinner{
-  width:46px;height:46px;border:3px solid var(--border);
-  border-top-color:var(--main);border-radius:50%;animation:spin .8s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:13px;color:var(--sub)}
+  /* ============================ ၁။ LANDING PAGE ============================ */
+  #landing {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #3d2817 0%, #1a0f08 70%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+  #landing.fade-out { opacity: 0; visibility: hidden; }
 
-/* Header */
-.header{
-  height:var(--header-height);flex:0 0 auto;background:var(--main);color:var(--main-ink);
-  display:flex;align-items:center;justify-content:space-between;padding:0 12px;
-  font-weight:700;font-size:17px;box-shadow:0 2px 10px rgba(0,0,0,.08);z-index:10;
-}
-.header .brand{display:flex;align-items:center;gap:8px;letter-spacing:-.2px}
-.header .brand small{font-size:10px;font-weight:800;background:rgba(0,0,0,.15);padding:2px 6px;border-radius:6px;letter-spacing:.5px}
-.header-actions{display:flex;gap:4px;align-items:center}
-.header button{
-  background:rgba(0,0,0,.08);border:none;width:38px;height:38px;border-radius:50%;
-  font-size:17px;display:flex;justify-content:center;align-items:center;cursor:pointer;
-  transition:transform .15s,background .2s;position:relative;color:inherit;
-}
-.header button:active{transform:scale(.88)}
-.header button.hidden{display:none}
-.header button.admin-on{background:rgba(255,255,255,.85)}
-.notif-dot{
-  position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;
-  background:var(--new-badge);border:1.5px solid var(--main);display:none;
-}
-.notif-dot.show{display:block;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  #landing::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(218,165,32,0.5), transparent),
+      radial-gradient(2px 2px at 60% 70%, rgba(218,165,32,0.4), transparent),
+      radial-gradient(1px 1px at 50% 50%, rgba(218,165,32,0.6), transparent),
+      radial-gradient(1px 1px at 80% 20%, rgba(218,165,32,0.3), transparent),
+      radial-gradient(2px 2px at 30% 80%, rgba(218,165,32,0.4), transparent);
+    animation: sparkle 4s ease-in-out infinite alternate;
+  }
+  @keyframes sparkle { 0% { opacity: 0.4; } 100% { opacity: 1; } }
 
-/* Toolbar */
-.toolbar{padding:12px 14px;flex:0 0 auto;display:flex;gap:8px;background:var(--card);border-bottom:1px solid var(--border)}
-.search-wrap{flex:1;position:relative}
-.search-wrap .s-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.5;pointer-events:none}
-.search-box{
-  width:100%;padding:11px 38px 11px 38px;border:1px solid var(--border);border-radius:12px;
-  background:var(--bg);color:var(--text);font-size:15px;transition:border-color .2s,background .2s;
-}
-.search-box:focus{border-color:var(--main);background:var(--card)}
-.search-clear{
-  position:absolute;right:8px;top:50%;transform:translateY(-50%);
-  width:24px;height:24px;border-radius:50%;border:none;background:var(--border);color:var(--sub);
-  font-size:12px;cursor:pointer;display:none;align-items:center;justify-content:center;
-}
-.search-clear.show{display:flex}
-.voice-btn{
-  flex:0 0 auto;width:44px;height:44px;border-radius:12px;
-  background:var(--bg);color:var(--text);border:1px solid var(--border);
-  font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:.2s;
-}
-.voice-btn:active{transform:scale(.92)}
-.voice-btn.rec{background:var(--danger);color:#fff;animation:pulse 1s infinite}
+  .landing-content {
+    text-align: center;
+    color: #fdf6e3;
+    padding: 40px;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1.2s ease-out;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-/* Quick Filters */
-.quick-filters{
-  display:flex;gap:6px;padding:0 14px 10px;overflow-x:auto;
-  background:var(--card);border-bottom:1px solid var(--border);
-  scrollbar-width:none;
-}
-.quick-filters::-webkit-scrollbar{display:none}
-.chip{
-  flex:0 0 auto;padding:7px 14px;border-radius:20px;background:var(--bg);
-  border:1px solid var(--border);color:var(--text);font-size:12.5px;font-weight:600;
-  cursor:pointer;white-space:nowrap;transition:.2s;
-}
-.chip.active{background:var(--main);color:var(--main-ink);border-color:var(--main)}
-.chip:active{transform:scale(.95)}
+  .landing-seal {
+    width: 130px; height: 130px;
+    border: 2px solid #daa520;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 30px;
+    font-size: 55px; color: #daa520;
+    background: radial-gradient(circle, rgba(218,165,32,0.15), transparent);
+    box-shadow: 0 0 40px rgba(218,165,32,0.3), inset 0 0 30px rgba(218,165,32,0.2);
+    position: relative;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(218,165,32,0.3), inset 0 0 30px rgba(218,165,32,0.2); }
+    50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(218,165,32,0.5), inset 0 0 40px rgba(218,165,32,0.3); }
+  }
+  .landing-seal::before {
+    content: '';
+    position: absolute; inset: 8px;
+    border: 1px dashed #daa520;
+    border-radius: 50%;
+    animation: rotate 20s linear infinite;
+  }
+  @keyframes rotate { to { transform: rotate(360deg); } }
 
-/* List */
-.list-content{
-  flex:1;overflow-y:auto;padding:14px;
-  padding-bottom:calc(30px + var(--safe-bottom) + var(--marquee-height));
-  -webkit-overflow-scrolling:touch;
-}
-.cat-box{
-  margin-bottom:12px;background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-s);
-  animation:fadeUp .25s ease both;
-}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.cat-header{
-  padding:14px;font-size:15.5px;font-weight:700;
-  display:flex;justify-content:space-between;align-items:center;
-  cursor:pointer;background:var(--bg);transition:.2s;gap:8px;user-select:none;
-}
-.cat-header.active{background:var(--main);color:var(--main-ink)}
-.cat-header .icon{transition:transform .3s cubic-bezier(.4,0,.2,1);font-size:11px;opacity:.7}
-.cat-header.active .icon{transform:rotate(180deg)}
-.cat-header-left{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.cat-header-left .cat-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cat-right{display:flex;align-items:center;gap:6px;flex:0 0 auto}
-.cat-count{
-  font-size:11px;font-weight:700;opacity:.55;background:rgba(0,0,0,.06);
-  padding:2px 7px;border-radius:20px;
-}
-[data-theme="dark"] .cat-count{background:rgba(255,255,255,.08)}
-.cat-header.active .cat-count{background:rgba(0,0,0,.12)}
-.cat-menu-btn{
-  width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.07);
-  color:inherit;font-size:13px;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;line-height:1;
-}
-.cat-header.active .cat-menu-btn{background:rgba(0,0,0,.12)}
-.cat-menu-btn:active{transform:scale(.9)}
-.sub-items{display:none;background:var(--card)}
-.sub-items.open{display:block;animation:fadeUp .2s ease both}
-.item-row{
-  padding:14px;border-bottom:1px solid var(--border);
-  display:flex;justify-content:space-between;align-items:center;
-  cursor:pointer;transition:background .15s;gap:10px;
-}
-.item-row:last-child{border-bottom:none}
-.item-row:active{background:var(--bg)}
-.item-row .arrow{color:var(--sub);font-size:10px;flex:0 0 auto;opacity:.6}
-.item-row-left{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.item-row-left .item-name{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-thumb{width:26px;height:26px;border-radius:6px;object-fit:cover;flex:0 0 auto;background:var(--border)}
-.new-badge{
-  background:var(--new-badge);color:#fff;font-size:8.5px;font-weight:800;
-  padding:2px 6px;border-radius:6px;letter-spacing:.6px;flex:0 0 auto;
-  animation:pulse 2s infinite;
-}
-.star-icon{font-size:13px;flex:0 0 auto;color:var(--main)}
+  .landing-content h1 {
+    font-size: 38px; color: #fdf6e3; letter-spacing: 3px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px rgba(218,165,32,0.5);
+  }
+  .landing-content .eng-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 18px; color: #daa520;
+    letter-spacing: 8px; text-transform: uppercase; margin-bottom: 45px;
+  }
 
-/* Ad Marquee */
-.ad-marquee{
-  position:absolute;left:0;right:0;bottom:0;
-  height:calc(var(--marquee-height) + var(--safe-bottom));
-  padding-bottom:var(--safe-bottom);background:#0f172a;color:#fff;
-  display:none;align-items:center;z-index:50;overflow:hidden;
-  border-top:1px solid rgba(255,255,255,.06);
-}
-.ad-marquee.show{display:flex}
-.ad-marquee-tag{
-  flex:0 0 auto;height:100%;padding:0 12px;background:var(--main);color:var(--main-ink);
-  display:flex;align-items:center;font-size:10.5px;font-weight:800;
-  letter-spacing:1.2px;z-index:2;position:relative;
-}
-.ad-marquee-tag::after{
-  content:'';position:absolute;top:0;right:-14px;bottom:0;width:14px;
-  background:linear-gradient(90deg,#0f172a 0%,rgba(15,23,42,0) 100%);pointer-events:none;
-}
-.ad-marquee-viewport{flex:1;overflow:hidden;height:100%;position:relative;display:flex;align-items:center}
-.ad-marquee-viewport::after{
-  content:'';position:absolute;top:0;right:0;bottom:0;width:30px;
-  background:linear-gradient(-90deg,#0f172a 0%,rgba(15,23,42,0) 100%);
-  pointer-events:none;z-index:1;
-}
-.ad-marquee-track{
-  display:inline-flex;align-items:center;white-space:nowrap;padding-left:20px;
-  animation:marqueeScroll var(--marquee-duration,28s) linear infinite;will-change:transform;
-}
-@keyframes marqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.ad-marquee-item{
-  display:inline-flex;align-items:center;font-size:13px;font-weight:500;
-  color:#e2e8f0;cursor:pointer;transition:color .2s;letter-spacing:.1px;
-}
-.ad-marquee-item:active{color:var(--main)}
-.ad-marquee-sep{display:inline-block;color:var(--main);margin:0 20px;font-size:10px;opacity:.85;transform:translateY(-1px)}
+  .enter-btn {
+    padding: 18px 50px;
+    font-size: 18px;
+    font-family: 'Pyidaungsu', sans-serif;
+    color: #1a0f08;
+    background: linear-gradient(135deg, #daa520, #f4d47a, #daa520);
+    border: none; border-radius: 50px;
+    cursor: pointer; font-weight: bold; letter-spacing: 2px;
+    box-shadow: 0 10px 30px rgba(218,165,32,0.4), 0 0 0 0 rgba(218,165,32,0.7);
+    transition: all 0.3s ease;
+    animation: btnPulse 2s infinite;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  @keyframes btnPulse {
+    0% { box-shadow: 0 10px 30px rgba(218,165,32,0.4), 0 0 0 0 rgba(218,165,32,0.6); }
+    70% { box-shadow: 0 10px 30px rgba(218,165,32,0.4), 0 0 0 20px rgba(218,165,32,0); }
+    100% { box-shadow: 0 10px 30px rgba(218,165,32,0.4), 0 0 0 0 rgba(218,165,32,0); }
+  }
+  .enter-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 40px rgba(218,165,32,0.6); }
+  .enter-btn .arrow { font-size: 22px; transition: transform 0.3s; }
+  .enter-btn:hover .arrow { transform: translateX(6px); }
 
-/* Detail View */
-#detail-view{
-  position:absolute;inset:0;background:var(--para);z-index:100;
-  transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
-  display:flex;flex-direction:column;will-change:transform;
-}
-#detail-view.active{transform:translateX(0)}
-#detail-view.dragging{transition:none}
-.read-progress{
-  position:absolute;top:0;left:0;height:2.5px;width:0%;
-  background:linear-gradient(90deg,var(--main),#ffd54f);z-index:10;
-  transition:width .1s linear;border-radius:0 2px 2px 0;
-  box-shadow:0 0 8px rgba(255,193,7,.5);
-}
-.detail-header{
-  height:var(--header-height);flex:0 0 auto;padding-top:var(--safe-top);
-  box-sizing:content-box;display:flex;align-items:center;justify-content:space-between;
-  padding-left:4px;padding-right:6px;background:var(--card);
-  border-bottom:1px solid var(--border);z-index:5;
-}
-.detail-header .title{
-  font-weight:700;font-size:14.5px;flex:1;min-width:0;text-align:center;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2px;
-}
-.detail-header-actions{display:flex;align-items:center;gap:0;flex:0 0 auto}
-.icon-btn{
-  background:transparent;border:none;width:34px;height:34px;border-radius:50%;
-  font-size:15px;display:flex;justify-content:center;align-items:center;
-  cursor:pointer;color:var(--text);transition:.18s;flex:0 0 auto;
-}
-.icon-btn:active{background:var(--border);transform:scale(.88)}
-.icon-btn.delete{color:var(--danger)}
-.icon-btn.hidden{display:none!important}
-.icon-btn.active{color:var(--main)}
-.font-btn{
-  font-size:12px!important;font-weight:800;width:28px;height:28px;
-  background:var(--bg);border:1px solid var(--border);margin:0 1px;
-}
-.detail-body{
-  flex:1;overflow-y:auto;padding:20px 18px;
-  -webkit-overflow-scrolling:touch;padding-bottom:calc(30px + var(--safe-bottom));
-}
-.upload-progress{
-  position:absolute;top:calc(var(--header-height) + var(--safe-top) + 8px);
-  left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;
-  padding:10px 18px;border-radius:24px;font-size:12.5px;font-weight:600;
-  display:none;align-items:center;gap:10px;z-index:20;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  box-shadow:0 4px 20px rgba(0,0,0,.3);white-space:nowrap;
-}
-.upload-progress.show{display:flex}
-.upload-progress .up-spinner{
-  width:14px;height:14px;border:2px solid rgba(255,255,255,.3);
-  border-top-color:var(--main);border-radius:50%;animation:spin .7s linear infinite;flex:0 0 auto;
-}
-.detail-img{
-  width:100%;max-height:42vh;object-fit:contain;border-radius:12px;
-  margin-bottom:18px;display:none;background:var(--bg);cursor:zoom-in;transition:opacity .2s;
-}
-.detail-img.loading{opacity:.4}
-.detail-img.img-error{
-  display:flex!important;align-items:center;justify-content:center;
-  min-height:120px;color:var(--sub);font-size:13px;padding:20px;cursor:default;
-}
-.detail-meta{
-  font-size:11px;color:var(--sub);margin-bottom:14px;
-  display:flex;gap:12px;flex-wrap:wrap;align-items:center;
-}
-.detail-text{
-  font-size:var(--font-size);line-height:1.85;
-  white-space:pre-wrap;word-break:break-word;transition:font-size .2s;
-}
-.edit-textarea{
-  display:none;width:100%;min-height:55vh;padding:14px;
-  border:2px solid var(--main);border-radius:12px;background:var(--card);
-  color:var(--text);font-size:var(--font-size);line-height:1.85;resize:vertical;
-  -webkit-appearance:none;
-}
-.edit-actions{
-  position:absolute;bottom:0;left:0;width:100%;
-  padding:14px 16px calc(14px + var(--safe-bottom));
-  background:var(--card);border-top:1px solid var(--border);
-  display:flex;gap:10px;transform:translateY(110%);
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 -6px 24px rgba(0,0,0,.06);z-index:6;
-}
-.edit-actions.show{transform:translateY(0)}
-.edit-actions button{flex:1;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:700;cursor:pointer;transition:.15s}
-.edit-actions button:active{transform:scale(.97)}
-.btn-cancel{background:var(--bg);color:var(--text);border:1px solid var(--border)!important}
-.btn-save{background:var(--main);color:var(--main-ink)}
+  .landing-hint {
+    margin-top: 25px; font-size: 13px; color: #daa520;
+    opacity: 0.6; letter-spacing: 2px; font-style: italic;
+  }
 
-/* Modals */
-.modal-overlay{
-  position:fixed;inset:0;background:var(--overlay);display:flex;
-  justify-content:center;align-items:center;z-index:1000;padding:20px;
-  opacity:0;pointer-events:none;transition:opacity .2s;
-  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
-}
-.modal-overlay.show{opacity:1;pointer-events:auto}
-.modal-box{
-  background:var(--modal);width:100%;max-width:400px;padding:22px;border-radius:20px;
-  box-shadow:var(--shadow-l);transform:scale(.92) translateY(8px);
-  max-height:88vh;overflow-y:auto;transition:transform .25s cubic-bezier(.175,.885,.32,1.275);
-  -webkit-overflow-scrolling:touch;
-}
-.modal-overlay.show .modal-box{transform:scale(1) translateY(0)}
-.modal-box h3{margin:0 0 18px 0;font-size:17px;text-align:center;font-weight:700}
-.modal-input,.modal-select{
-  width:100%;padding:14px;border:2px solid var(--border);border-radius:12px;
-  background:var(--bg);color:var(--text);font-size:15.5px;margin-bottom:13px;
-  transition:border-color .2s;-webkit-appearance:none;appearance:none;
-}
-textarea.modal-input{min-height:80px;resize:vertical;line-height:1.5}
-.modal-select{
-  background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
-  background-repeat:no-repeat;background-position:right 12px center;
-  background-size:18px;padding-right:40px;
-}
-.modal-input:focus,.modal-select:focus{border-color:var(--main)}
-.modal-input.pin{text-align:center;letter-spacing:10px;font-size:22px;font-weight:700}
-.modal-btns{display:flex;gap:10px}
-.modal-btns button{flex:1;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:700;cursor:pointer;transition:.15s}
-.modal-btns button:active{transform:scale(.97)}
-.modal-btns button:disabled{opacity:.5;cursor:not-allowed}
-.btn-ghost{background:var(--bg);color:var(--text);border:1px solid var(--border)!important}
-.btn-primary{background:var(--main);color:var(--main-ink)}
-.btn-danger{background:var(--danger);color:#fff}
-.modal-desc{font-size:13px;color:var(--sub);text-align:center;margin:0 0 16px;line-height:1.65}
-.empty-state{text-align:center;color:var(--sub);padding:60px 20px;font-size:14.5px;line-height:1.8}
-.empty-state .big{font-size:46px;display:block;margin-bottom:12px;opacity:.5}
+  /* ============================ ၂။ BOOK VIEW ============================ */
+  #bookView {
+    min-height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+    background: radial-gradient(circle at center, #3d2817 0%, #1a0f08 100%);
+    perspective: 2000px;
+  }
+  #bookView.active { display: flex; }
 
-/* Settings */
-#settingModal .modal-box{padding:0;overflow:hidden;max-width:420px}
-.settings-header{
-  padding:20px 22px 16px;display:flex;align-items:center;justify-content:center;
-  border-bottom:1px solid var(--border);position:relative;
-}
-.settings-header h3{margin:0;font-size:17px;font-weight:700}
-.settings-header .settings-x{
-  position:absolute;right:14px;top:50%;transform:translateY(-50%);
-  width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);
-  color:var(--sub);font-size:14px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-}
-.settings-header .settings-x:active{transform:translateY(-50%) scale(.9)}
-.settings-scroll{padding:14px 16px 16px;max-height:calc(88vh - 65px);overflow-y:auto}
-.settings-section{margin-bottom:16px}
-.settings-section:last-of-type{margin-bottom:8px}
-.settings-section-title{
-  font-size:10.5px;font-weight:800;color:var(--sub);text-transform:uppercase;
-  letter-spacing:1.2px;padding:0 6px 8px;display:flex;align-items:center;gap:6px;
-}
-.settings-list{background:var(--bg);border-radius:14px;overflow:hidden;border:1px solid var(--border)}
-.settings-row{
-  display:flex;align-items:center;gap:14px;width:100%;padding:14px 15px;
-  background:transparent;border:none;border-bottom:1px solid var(--border);
-  cursor:pointer;text-align:left;color:var(--text);transition:background .15s;
-  font-family:inherit;
-}
-.settings-row:last-child{border-bottom:none}
-.settings-row:active{background:var(--card)}
-.settings-icon{font-size:19px;width:26px;height:26px;text-align:center;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
-.settings-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
-.settings-title{font-size:14.5px;font-weight:700;color:var(--text);line-height:1.35}
-.settings-desc{font-size:11.5px;color:var(--sub);font-weight:400;line-height:1.4}
-.settings-chevron{color:var(--sub);font-size:20px;opacity:.35;flex:0 0 auto;line-height:1}
-.settings-row.danger .settings-title{color:var(--danger)}
-.settings-row.danger .settings-icon{color:var(--danger)}
+  .book {
+    display: flex;
+    width: 100%; max-width: 1050px;
+    background: #fdf6e3;
+    border-radius: 8px;
+    box-shadow:
+      0 30px 60px rgba(0,0,0,0.7),
+      0 0 80px rgba(218, 165, 32, 0.15),
+      inset 0 0 100px rgba(139, 69, 19, 0.08);
+    position: relative;
+    transform-style: preserve-3d;
+    animation: bookAppear 1s ease-out;
+  }
+  @keyframes bookAppear {
+    from { opacity: 0; transform: rotateX(20deg) scale(0.9); }
+    to { opacity: 1; transform: rotateX(0) scale(1); }
+  }
 
-/* Ad Manager */
-.ad-item{padding:10px;background:var(--bg);border-radius:12px;border:1px solid var(--border);margin-bottom:9px}
-.ad-item-row{display:flex;gap:10px;align-items:center}
-.ad-item-thumb{width:48px;height:48px;border-radius:8px;object-fit:cover;flex:0 0 auto;background:var(--border)}
-.ad-item-thumb-placeholder{
-  width:48px;height:48px;border-radius:8px;background:var(--border);
-  display:flex;align-items:center;justify-content:center;font-size:20px;flex:0 0 auto;
-}
-.ad-item-actions{display:flex;gap:6px;margin-top:9px}
-.ad-item-actions button{
-  flex:1;padding:8px;border-radius:8px;font-size:12px;font-weight:700;
-  cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);
-}
-.ad-item-actions button.danger{background:var(--danger);color:#fff;border-color:var(--danger)}
-.img-preview-wrap{display:none;margin-bottom:13px;position:relative;border-radius:12px;overflow:hidden;background:var(--bg)}
-.img-preview-wrap.show{display:block}
-.img-preview-wrap img{width:100%;max-height:180px;object-fit:contain;display:block}
-.img-preview-remove{
-  position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;
-  background:var(--danger);color:#fff;border:none;cursor:pointer;font-size:14px;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.3);
-}
+  .book::before {
+    content: '';
+    position: absolute; left: -18px; top: 0; bottom: 0; width: 18px;
+    background: linear-gradient(90deg, #4a2c17, #8b4513 50%, #5c3418);
+    border-radius: 8px 0 0 8px;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+  }
+  .book::after {
+    content: '';
+    position: absolute; right: -18px; top: 0; bottom: 0; width: 18px;
+    background: linear-gradient(90deg, #5c3418, #8b4513 50%, #4a2c17);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+  }
 
-/* Lightbox */
-#lightbox{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;padding:20px}
-#lightbox.show{display:flex}
-#lightbox img{max-width:100%;max-height:90%;object-fit:contain;border-radius:8px}
-#lightbox .close-lb{
-  position:absolute;top:calc(16px + var(--safe-top));right:16px;
-  width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);
-  border:none;color:#fff;font-size:20px;cursor:pointer;
-}
+  .page {
+    flex: 1;
+    padding: 50px 45px;
+    position: relative;
+    background: linear-gradient(to right, #fdf6e3 0%, #f5ebd0 100%);
+    min-height: 620px;
+  }
+  .page.left {
+    border-radius: 8px 0 0 8px;
+    background: linear-gradient(to right, rgba(139,69,19,0.08) 0%, transparent 5%, transparent 95%, rgba(139,69,19,0.15) 100%), #fdf6e3;
+  }
+  .page.right {
+    border-radius: 0 8px 8px 0;
+    background: linear-gradient(to left, rgba(139,69,19,0.08) 0%, transparent 5%, transparent 95%, rgba(139,69,19,0.15) 100%), #fdf6e3;
+  }
 
-/* Voice overlay */
-#voiceOverlay{
-  position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.85);
-  display:none;flex-direction:column;align-items:center;justify-content:center;
-  padding:30px;color:#fff;text-align:center;
-}
-#voiceOverlay.show{display:flex}
-#voiceOverlay .voice-mic{
-  font-size:70px;margin-bottom:20px;animation:pulse 1.2s infinite;
-}
-#voiceOverlay .voice-text{font-size:20px;font-weight:700;min-height:32px}
-#voiceOverlay .voice-hint{font-size:13px;opacity:.6;margin-top:14px}
+  .spine {
+    width: 30px;
+    background: linear-gradient(90deg, #5c3418 0%, #8b4513 20%, #3d2817 50%, #8b4513 80%, #5c3418 100%);
+    position: relative; z-index: 2;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.4);
+  }
+  .spine::before {
+    content: '';
+    position: absolute; top: 10%; bottom: 10%; left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, #daa520 20%, #daa520 80%, transparent);
+    opacity: 0.6;
+  }
 
-/* Toast — above marquee */
-.toast{
-  position:fixed;
-  bottom:calc(64px + var(--safe-bottom) + var(--marquee-height));
-  left:50%;transform:translateX(-50%) translateY(100px);
-  background:#22252b;color:#fff;padding:12px 22px;border-radius:30px;
-  font-size:13.5px;font-weight:500;z-index:10000;opacity:0;
-  transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s;
-  box-shadow:0 8px 28px rgba(0,0,0,.35);max-width:88vw;text-align:center;
-  pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-.toast.error{background:var(--danger)}
-.toast.success{background:var(--success)}
+  .frame {
+    border: 2px solid #daa520;
+    padding: 25px;
+    height: 100%;
+    position: relative;
+    background-image:
+      radial-gradient(circle at 0% 0%, rgba(218,165,32,0.1) 0%, transparent 30%),
+      radial-gradient(circle at 100% 0%, rgba(218,165,32,0.1) 0%, transparent 30%),
+      radial-gradient(circle at 0% 100%, rgba(218,165,32,0.1) 0%, transparent 30%),
+      radial-gradient(circle at 100% 100%, rgba(218,165,32,0.1) 0%, transparent 30%);
+    min-height: 540px;
+    display: flex;
+    flex-direction: column;
+  }
+  .frame::before {
+    content: '';
+    position: absolute; inset: 6px;
+    border: 1px solid #c9a961;
+    pointer-events: none;
+  }
+  .frame::after {
+    content: '❦';
+    position: absolute; top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: #fdf6e3;
+    padding: 0 10px;
+    color: #8b4513; font-size: 20px;
+  }
 
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-::-webkit-scrollbar-track{background:transparent}
+  /* ဘယ်ဘက် content */
+  .left-content {
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+  }
+  .top-ornament { color: #daa520; font-size: 28px; letter-spacing: 8px; }
+  .invitation-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 16px; color: #8b4513;
+    letter-spacing: 6px; text-transform: uppercase; opacity: 0.8;
+  }
+  .title {
+    font-size: 30px; font-weight: 700; color: #4a1d1d;
+    line-height: 1.7; letter-spacing: 1px;
+    text-shadow: 1px 1px 0 rgba(218,165,32,0.3);
+    margin: 15px 0;
+  }
+  .title .accent { color: #8b4513; display: block; font-size: 24px; margin-top: 5px; }
+  .ornament {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; color: #daa520; margin: 15px 0;
+  }
+  .ornament::before, .ornament::after {
+    content: '';
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, #daa520, transparent);
+  }
+  .ornament-icon { font-size: 20px; color: #8b4513; }
+  .sub-info { font-size: 15px; color: #5c3418; line-height: 2; font-style: italic; }
+  .seal {
+    width: 90px; height: 90px;
+    border: 2px solid #8b4513;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #8b4513; font-size: 13px; text-align: center; line-height: 1.4;
+    background: radial-gradient(circle, #fdf6e3, #f0e0c0);
+    box-shadow: inset 0 0 10px rgba(139,69,19,0.2), 0 3px 8px rgba(0,0,0,0.1);
+    margin-top: 15px; font-weight: bold;
+    position: relative; padding: 5px;
+  }
+  .seal::before {
+    content: '';
+    position: absolute; inset: 5px;
+    border: 1px dashed #8b4513;
+    border-radius: 50%;
+  }
+
+  /* ညာဘက် content */
+  .right-content { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .letter-salutation {
+    font-size: 16px; color: #4a1d1d; font-weight: bold;
+    margin-bottom: 15px; text-align: center; font-style: italic;
+  }
+  .letter-body {
+    font-size: 15px; line-height: 2.1; color: #2c1810;
+    text-align: justify; text-justify: inter-word;
+    margin-bottom: 20px; text-indent: 25px;
+  }
+  .letter-body .highlight {
+    color: #8b4513; font-weight: bold;
+    background: linear-gradient(180deg, transparent 60%, rgba(218,165,32,0.3) 60%);
+    padding: 0 2px;
+  }
+
+  .details {
+    margin-top: 15px;
+    padding: 18px 20px;
+    border-top: 1px solid #daa520;
+    border-bottom: 1px solid #daa520;
+    background: linear-gradient(135deg, rgba(218,165,32,0.05), rgba(139,69,19,0.03));
+    position: relative;
+  }
+  .details::before, .details::after {
+    content: '❦';
+    position: absolute; left: 50%;
+    transform: translateX(-50%);
+    background: #fdf6e3;
+    padding: 0 10px;
+    color: #8b4513; font-size: 14px;
+  }
+  .details::before { top: -10px; }
+  .details::after { bottom: -10px; }
+
+  .detail-row {
+    display: flex; font-size: 14.5px; line-height: 1.9;
+    color: #2c1810; margin: 6px 0;
+  }
+  .detail-row .label {
+    width: 115px; font-weight: bold; color: #8b4513; flex-shrink: 0;
+  }
+  .detail-row .label::after { content: ' :'; }
+  .detail-row .value { flex: 1; }
+
+  .signature {
+    text-align: right; margin-top: 20px;
+    font-size: 14px; color: #5c3418; line-height: 1.8;
+  }
+  .signature .sign-line {
+    display: inline-block;
+    border-top: 1px solid #8b4513;
+    padding-top: 5px; margin-top: 25px;
+    font-style: italic; color: #8b4513;
+  }
+
+  /* ============================ EDIT MODE STYLE ============================ */
+  [contenteditable="true"] {
+    outline: 2px dashed rgba(218,165,32,0.6);
+    outline-offset: 4px;
+    border-radius: 3px;
+    cursor: text;
+    transition: outline 0.2s;
+    min-width: 20px;
+  }
+  [contenteditable="true"]:focus {
+    outline: 2px solid #daa520;
+    background: rgba(255, 250, 235, 0.9);
+    box-shadow: 0 0 20px rgba(218,165,32,0.4);
+  }
+  [contenteditable="true"]:hover { background: rgba(218,165,32,0.08); }
+
+  .edit-indicator {
+    position: fixed; top: 20px; left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #daa520, #f4d47a);
+    color: #1a0f08;
+    padding: 10px 30px;
+    border-radius: 50px;
+    font-weight: bold; font-size: 14px; letter-spacing: 1px;
+    box-shadow: 0 8px 25px rgba(218,165,32,0.5);
+    z-index: 5000; display: none;
+    animation: slideDown 0.4s ease-out;
+  }
+  .edit-indicator.active { display: block; }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translate(-50%, -20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
+
+  /* ============================ ADMIN FLOATING BTN ============================ */
+  .admin-toggle {
+    position: fixed; bottom: 30px; right: 30px;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8b4513, #5c3418);
+    color: #daa520;
+    border: 2px solid #daa520;
+    font-size: 26px; cursor: pointer;
+    z-index: 4000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5), 0 0 20px rgba(218,165,32,0.3);
+    transition: all 0.3s;
+    display: none; align-items: center; justify-content: center;
+  }
+  .admin-toggle.visible { display: flex; }
+  .admin-toggle:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.6), 0 0 30px rgba(218,165,32,0.5);
+  }
+
+  /* ============================ ADMIN PANEL ============================ */
+  .admin-panel {
+    position: fixed; top: 0; right: -420px;
+    width: 380px; max-width: 90vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #2c1810, #1a0f08);
+    border-left: 3px solid #daa520;
+    box-shadow: -10px 0 40px rgba(0,0,0,0.7);
+    z-index: 4500;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    padding: 25px;
+  }
+  .admin-panel.open { right: 0; }
+
+  .admin-panel h2 {
+    color: #daa520; font-size: 22px;
+    margin-bottom: 25px; padding-bottom: 15px;
+    border-bottom: 2px solid rgba(218,165,32,0.3);
+    letter-spacing: 2px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .close-panel {
+    background: none; border: 1px solid #daa520; color: #daa520;
+    width: 32px; height: 32px; border-radius: 50%;
+    cursor: pointer; font-size: 18px; transition: all 0.3s;
+  }
+  .close-panel:hover { background: #daa520; color: #1a0f08; transform: rotate(90deg); }
+
+  .admin-section {
+    margin-bottom: 25px; padding: 18px;
+    background: rgba(218,165,32,0.05);
+    border: 1px solid rgba(218,165,32,0.2);
+    border-radius: 10px;
+  }
+  .admin-section h3 {
+    color: #f4d47a; font-size: 14px;
+    margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  .admin-btn {
+    width: 100%; padding: 12px 18px; margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #daa520;
+    background: transparent; color: #daa520;
+    font-family: 'Pyidaungsu', sans-serif; font-size: 14px;
+    cursor: pointer; transition: all 0.3s;
+    display: flex; align-items: center; gap: 10px;
+    justify-content: flex-start; letter-spacing: 0.5px;
+  }
+  .admin-btn:last-child { margin-bottom: 0; }
+  .admin-btn:hover { background: #daa520; color: #1a0f08; transform: translateX(5px); }
+  .admin-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .admin-btn:disabled:hover { background: transparent; color: #daa520; }
+  .admin-btn.primary {
+    background: linear-gradient(135deg, #daa520, #f4d47a);
+    color: #1a0f08; font-weight: bold;
+  }
+  .admin-btn.primary:hover { box-shadow: 0 0 25px rgba(218,165,32,0.6); }
+  .admin-btn.danger { border-color: #e74c3c; color: #e74c3c; }
+  .admin-btn.danger:hover { background: #e74c3c; color: #fff; }
+  .admin-btn.active { background: #2ecc71; border-color: #2ecc71; color: #fff; }
+
+  .status-msg {
+    margin-top: 12px; padding: 10px;
+    border-radius: 6px; font-size: 13px;
+    text-align: center; display: none;
+  }
+  .status-msg.success {
+    display: block;
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+  }
+  .status-msg.error {
+    display: block;
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+  }
+
+  /* ============================ LOGIN MODAL ============================ */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    display: none; justify-content: center; align-items: center;
+    z-index: 6000; padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .login-modal {
+    background: linear-gradient(135deg, #2c1810, #1a0f08);
+    border: 2px solid #daa520;
+    border-radius: 20px;
+    padding: 40px 35px;
+    width: 100%; max-width: 400px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(218,165,32,0.3);
+    animation: modalPop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  @keyframes modalPop {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .login-modal h2 {
+    color: #daa520; text-align: center;
+    font-size: 22px; margin-bottom: 10px; letter-spacing: 2px;
+  }
+  .login-modal p {
+    color: #daa520; text-align: center;
+    font-size: 13px; opacity: 0.6; margin-bottom: 25px; letter-spacing: 1px;
+  }
+  .lock-icon {
+    text-align: center; font-size: 50px; color: #daa520;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 20px rgba(218,165,32,0.5));
+  }
+
+  .password-input {
+    width: 100%; padding: 14px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(218,165,32,0.4);
+    background: rgba(0,0,0,0.4);
+    color: #f4d47a;
+    font-family: 'Pyidaungsu', sans-serif;
+    font-size: 15px; letter-spacing: 2px;
+    outline: none; transition: all 0.3s; margin-bottom: 15px;
+  }
+  .password-input:focus {
+    border-color: #daa520;
+    box-shadow: 0 0 20px rgba(218,165,32,0.4);
+  }
+  .password-input::placeholder { color: rgba(218,165,32,0.3); letter-spacing: 1px; }
+
+  .login-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #daa520, #f4d47a);
+    color: #1a0f08; border: none; border-radius: 10px;
+    font-family: 'Pyidaungsu', sans-serif;
+    font-size: 16px; font-weight: bold; letter-spacing: 2px;
+    cursor: pointer; transition: all 0.3s; margin-bottom: 10px;
+  }
+  .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(218,165,32,0.5); }
+
+  .cancel-btn {
+    width: 100%; padding: 12px;
+    background: transparent; color: #888;
+    border: 1px solid #444; border-radius: 10px;
+    font-family: 'Pyidaungsu', sans-serif;
+    font-size: 14px; cursor: pointer; transition: all 0.3s;
+  }
+  .cancel-btn:hover { color: #daa520; border-color: #daa520; }
+
+  .login-error {
+    color: #e74c3c; text-align: center; font-size: 13px;
+    margin-bottom: 10px; display: none; padding: 8px;
+    background: rgba(231, 76, 60, 0.1); border-radius: 6px;
+  }
+  .login-error.show { display: block; }
+
+  /* ============================ RESPONSIVE ============================ */
+  @media (max-width: 768px) {
+    .book { flex-direction: column; max-width: 500px; }
+    .book::before, .book::after { display: none; }
+    .page { border-radius: 8px !important; padding: 30px 22px; min-height: auto; }
+    .frame { min-height: auto; padding: 20px 15px; }
+    .spine {
+      width: 100%; height: 20px;
+      background: linear-gradient(180deg, #5c3418 0%, #8b4513 20%, #3d2817 50%, #8b4513 80%, #5c3418 100%);
+    }
+    .spine::before {
+      top: 50%; left: 10%; right: 10%;
+      bottom: auto; width: auto; height: 2px;
+      transform: translateY(-50%);
+      background: linear-gradient(to right, transparent, #daa520 20%, #daa520 80%, transparent);
+    }
+    .title { font-size: 22px; }
+    .title .accent { font-size: 18px; }
+    .letter-body { font-size: 14px; line-height: 2; }
+    .detail-row { flex-direction: column; gap: 2px; }
+    .detail-row .label { width: auto; }
+    .landing-content h1 { font-size: 26px; }
+    .landing-content .eng-title { font-size: 14px; letter-spacing: 5px; }
+    .landing-seal { width: 100px; height: 100px; font-size: 40px; }
+    .enter-btn { padding: 15px 35px; font-size: 16px; }
+    .admin-panel { width: 100%; right: -100%; }
+    .admin-toggle { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 22px; }
+  }
+
+  /* ==================== PRO EDITOR / TOOLBAR ==================== */
+  :root{
+    --pro-gold:#c9a227;
+    --pro-gold2:#f1d98a;
+    --pro-burgundy:#5a2028;
+    --pro-ink:#2c1810;
+  }
+  .editor-toolbar{
+    display:none;
+    position:sticky; top:0; z-index:20;
+    margin:-25px -25px 18px;
+    padding:12px;
+    background:rgba(28,15,8,.96);
+    border-bottom:1px solid rgba(218,165,32,.35);
+    backdrop-filter:blur(12px);
+  }
+  .editor-toolbar.show{display:block}
+  .editor-toolbar .toolbar-title{color:#f4d47a;font-weight:700;font-size:13px;margin-bottom:9px}
+  .toolbar-row{display:flex;flex-wrap:wrap;gap:7px}
+  .tool-btn,.tool-select{
+    border:1px solid rgba(218,165,32,.45);
+    background:rgba(255,255,255,.04);
+    color:#f7e8bd;
+    border-radius:7px;
+    min-height:36px;
+    padding:7px 10px;
+    font-family:'Pyidaungsu',sans-serif;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .tool-btn:hover,.tool-select:focus{background:#daa520;color:#1a0f08;outline:none}
+  .tool-btn.active{background:#daa520;color:#1a0f08}
+  .tool-select option{background:#2c1810;color:#fff}
+  .selected-editable{ outline:2px solid #daa520 !important; outline-offset:5px; }
+
+  /* ==========================================================
+     🖼️ ဓာတ်ပုံ Frame  —  DEFAULT: လုံးဝ ဖျောက်ထား (Hidden)
+     ========================================================== */
+  .photo-frame{
+    display: none;                 /* ← အစပိုင်းတွင် လုံးဝ မမြင်ရ */
+    width: 240px;
+    max-width: 100%;
+    margin: 4px auto 2px;
+    padding: 9px;
+    position: relative;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #fffdf7, #f3e7cc);
+    border: 1px solid rgba(139,69,19,.28);
+    box-shadow:
+      0 14px 28px rgba(74,29,29,.16),
+      0 2px 0 rgba(255,255,255,.85) inset,
+      0 0 0 1px rgba(218,165,32,.22);
+  }
+  .photo-frame.visible{
+    display: block;
+    animation: photoIn .55s cubic-bezier(.22,1,.36,1);
+  }
+  @keyframes photoIn{
+    from{ opacity:0; transform: translateY(10px) scale(.96); }
+    to  { opacity:1; transform: none; }
+  }
+  .photo-frame::before{
+    content:'';
+    position:absolute; inset:4px;
+    border:1px solid rgba(201,162,39,.6);
+    border-radius:3px;
+    pointer-events:none;
+  }
+  .photo-inner{
+    position:relative;
+    width:100%;
+    aspect-ratio: 4 / 3;
+    overflow:hidden;
+    border-radius:3px;
+    background:#efe3c8;
+    box-shadow: 0 0 0 1px rgba(139,69,19,.22) inset;
+  }
+  .photo-inner img{
+    width:100%; height:100%;
+    object-fit: cover;
+    display:block;
+    transition: transform .7s cubic-bezier(.22,1,.36,1);
+  }
+  .photo-frame:hover .photo-inner img{ transform: scale(1.035); }
+  .photo-caption{
+    margin-top:9px;
+    font-size:11px;
+    letter-spacing:.8px;
+    text-align:center;
+    color:#8b4513;
+    font-style:italic;
+    opacity:.85;
+    line-height:1.6;
+  }
+
+  /* ဓာတ်ပုံ ခလုတ်ငယ်များ */
+  .image-actions{
+    display:none;
+    gap:7px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin:10px 0 2px;
+  }
+  .image-actions.show{ display:flex; }
+  .mini-btn{
+    border:1px solid #c9a961;
+    background:#fffaf0;
+    color:#5c3418;
+    border-radius:7px;
+    padding:6px 11px;
+    font-family:'Pyidaungsu',sans-serif;
+    cursor:pointer;
+    font-size:12px;
+    transition:all .2s;
+  }
+  .mini-btn:hover{ background:#daa520; color:#1a0f08; transform:translateY(-1px); }
+
+  .admin-image-preview{
+    width:100%; max-height:180px; object-fit:contain;
+    background:#120a06;
+    border:1px solid rgba(218,165,32,.25);
+    border-radius:8px; margin-top:10px; display:none;
+  }
+  .image-size-row{
+    display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:9px;
+  }
+  .image-size-row input,
+  .image-size-row select{
+    width:100%; padding:9px; border-radius:7px;
+    border:1px solid rgba(218,165,32,.35);
+    background:rgba(0,0,0,.25);
+    color:#f4d47a;
+    font-family:'Pyidaungsu',sans-serif;
+    font-size:12px;
+  }
+  .image-size-row select option{ background:#2c1810; color:#fff; }
+
+  /* ============================ TOAST ============================ */
+  .toast-wrap{
+    position:fixed; top:22px; left:50%;
+    transform:translateX(-50%);
+    z-index:8000;
+    display:flex; flex-direction:column;
+    gap:8px; align-items:center;
+    pointer-events:none;
+    width:max-content; max-width:92vw;
+  }
+  .toast{
+    padding:11px 24px;
+    border-radius:50px;
+    font-size:13.5px;
+    font-weight:700;
+    letter-spacing:.4px;
+    background:linear-gradient(135deg,#daa520,#f4d47a);
+    color:#1a0f08;
+    box-shadow:0 12px 34px rgba(0,0,0,.5);
+    animation: toastIn .35s cubic-bezier(.22,1,.36,1);
+    text-align:center;
+  }
+  .toast.success{ background:linear-gradient(135deg,#2ecc71,#8ce8b0); color:#0d2b1a; }
+  .toast.error{ background:linear-gradient(135deg,#e74c3c,#ff9a8c); color:#fff; }
+  .toast.out{ animation: toastOut .3s ease-in forwards; }
+  @keyframes toastIn{ from{ opacity:0; transform:translateY(-16px) scale(.94);} to{ opacity:1; transform:none;} }
+  @keyframes toastOut{ to{ opacity:0; transform:translateY(-16px) scale(.94);} }
+
+  @media (max-width:768px){
+    .editor-toolbar{ margin:-20px -15px 15px; }
+    .photo-frame{ width:200px; }
+  }
+
+  /* ============================ PRINT (ပရင့်ထုတ်ရန်) ============================ */
+  @media print {
+    body { background:#fff !important; }
+    #landing,
+    .admin-toggle,
+    .admin-panel,
+    .edit-indicator,
+    .image-actions,
+    .modal-overlay,
+    .toast-wrap { display:none !important; }
+    #bookView {
+      display:flex !important;
+      padding:0; background:#fff !important;
+      min-height:auto;
+    }
+    .book { box-shadow:none !important; max-width:100%; }
+    .page { background:#fff !important; min-height:auto; }
+    .book::before, .book::after { display:none; }
+    .spine { background:#8b4513 !important; }
+  }
 </style>
 </head>
 <body>
 
-<div id="app">
-  <!-- Loading -->
-  <div id="loading-screen">
-    <div class="spinner"></div>
-    <div class="loading-text">ဒေတာများ ရယူနေသည်...</div>
-  </div>
-
-  <!-- Status Bar -->
-  <div class="status-bar">
-    <span class="status-dot" id="statusDot"></span>
-    <span id="statusText">ချိတ်ဆက်နေသည်...</span>
-  </div>
-
-  <!-- MAIN VIEW -->
-  <div id="main-view" style="flex:1;display:flex;flex-direction:column;min-height:0">
-    <div class="header">
-      <span class="brand">📱 Basic App <small>PRO</small></span>
-      <div class="header-actions">
-        <button onclick="toggleTheme()" id="themeBtn" aria-label="Theme">🌙</button>
-        <button onclick="openSettings()" id="settingBtn" aria-label="Settings">
-          ⚙️<span class="notif-dot" id="settingDot"></span>
-        </button>
-        <button onclick="toggleAdminModal()" id="adminBtn" aria-label="Admin">🔒</button>
-        <button onclick="openAddModal()" id="addBtn" class="hidden admin-on" style="font-size:23px;font-weight:400" aria-label="Add">+</button>
-      </div>
-    </div>
-
-    <div class="toolbar">
-      <div class="search-wrap">
-        <span class="s-icon">🔍</span>
-        <input type="text" class="search-box" id="search" placeholder="ရှာဖွေရန်..." oninput="onSearch()">
-        <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
-      </div>
-      <button class="voice-btn" id="voiceBtn" onclick="startVoiceSearch()" aria-label="Voice">🎤</button>
-    </div>
-
-    <div class="quick-filters" id="quickFilters">
-      <button class="chip active" data-filter="all" onclick="setQuickFilter('all')">📋 အားလုံး</button>
-      <button class="chip" data-filter="new" onclick="setQuickFilter('new')">🆕 အသစ်</button>
-      <button class="chip" data-filter="starred" onclick="setQuickFilter('starred')">⭐ မှတ်ထားသည်</button>
-      <button class="chip" data-filter="recent" onclick="setQuickFilter('recent')">🕐 မကြာသေးမီ</button>
-    </div>
-
-    <div class="list-content" id="list">
-      <div id="catsList">
-        <div class="empty-state">ဒေတာများ ရယူနေသည်...</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- BOTTOM AD MARQUEE -->
-  <div class="ad-marquee" id="adMarquee">
-    <span class="ad-marquee-tag">AD</span>
-    <div class="ad-marquee-viewport">
-      <div class="ad-marquee-track" id="adMarqueeTrack"></div>
-    </div>
-  </div>
-
-  <!-- DETAIL VIEW -->
-  <div id="detail-view">
-    <div class="read-progress" id="readProgress"></div>
-    <div class="detail-header">
-      <button class="icon-btn" onclick="closeDetail()" aria-label="Back">⬅️</button>
-      <div class="title" id="detailTitle">Title</div>
-      <div class="detail-header-actions">
-        <button class="icon-btn font-btn" onclick="changeFontSize(-1)" aria-label="Smaller">A-</button>
-        <button class="icon-btn font-btn" onclick="changeFontSize(1)" aria-label="Larger">A+</button>
-        <button class="icon-btn" id="starBtn" onclick="toggleStarCurrent()" aria-label="Star">☆</button>
-        <button class="icon-btn" id="copyBtn" onclick="copyText()" aria-label="Copy">📋</button>
-        <button class="icon-btn hidden" id="shareBtn" onclick="shareText()" aria-label="Share">📤</button>
-        <button class="icon-btn hidden" id="photoBtn" onclick="triggerPhotoUpload()" aria-label="Photo">📷</button>
-        <button class="icon-btn hidden" id="editBtn" onclick="toggleEdit()" aria-label="Edit">✏️</button>
-        <button class="icon-btn delete hidden" id="deleteBtn" onclick="openDeleteModal()" aria-label="Delete">🗑️</button>
-      </div>
-    </div>
-    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="uploadImg(event)">
-    <div class="upload-progress" id="uploadProgress">
-      <span class="up-spinner"></span>
-      <span id="uploadProgressText">ပုံတင်နေသည်...</span>
-    </div>
-    <div class="detail-body" id="detailBody">
-      <img src="" id="detailImg" class="detail-img" onclick="openLightbox(this.src)" alt="">
-      <div class="detail-meta" id="detailMeta"></div>
-      <div class="detail-text" id="detailText"></div>
-      <textarea class="edit-textarea" id="editTextarea" placeholder="စာသား ရေးထည့်ပါ..."></textarea>
-    </div>
-    <div class="edit-actions" id="editActions">
-      <button class="btn-cancel" onclick="toggleEdit()">မလုပ်တော့ဘူး</button>
-      <button class="btn-save" onclick="saveEdit()">💾 သိမ်းမယ်</button>
-    </div>
+<!-- ============================ ၁။ LANDING PAGE ============================ -->
+<div id="landing">
+  <div class="landing-content">
+    <div class="landing-seal">❦</div>
+    <h1>ဖိတ်ကြားလွှာ</h1>
+    <div class="eng-title">Invitation</div>
+    <button class="enter-btn" onclick="enterBook()">
+      <span>ဝင်ရောက်ကြည့်ရှုရန်</span>
+      <span class="arrow">→</span>
+    </button>
+    <p class="landing-hint">Click တစ်ချက်နှိပ်ပါ</p>
   </div>
 </div>
 
-<!-- VOICE OVERLAY -->
-<div id="voiceOverlay">
-  <div class="voice-mic">🎤</div>
-  <div class="voice-text" id="voiceText">ပြောပါ...</div>
-  <div class="voice-hint">ရပ်တန့်ရန် မျက်နှာပြင်ကို နှိပ်ပါ</div>
-</div>
+<!-- ============================ ၂။ BOOK VIEW ============================ -->
+<div id="bookView">
+  <div class="book">
 
-<!-- ═══ MODALS ═══ -->
+    <!-- ဘယ်ဘက် စာမျက်နှာ -->
+    <div class="page left">
+      <div class="frame">
+        <div class="left-content">
+          <div class="top-ornament">✦ ❦ ✦</div>
+          <div class="invitation-label" data-key="label">Invitation</div>
+          <h1 class="title" data-key="title">
+            စုပေါင်းမင်္ဂလာ<br>
+            အလှူတော်မင်္ဂလာ
+            <span class="accent">ဖိတ်ကြားလွှာ</span>
+          </h1>
+          <div class="ornament"><span class="ornament-icon">❦</span></div>
 
-<!-- Admin Login -->
-<div class="modal-overlay" id="adminModal">
-  <div class="modal-box">
-    <h3>🔐 Admin ဝင်ရောက်ရန်</h3>
-    <input type="password" class="modal-input pin" id="pinInput" placeholder="••••" inputmode="numeric" maxlength="4" autocomplete="off">
-    <div class="modal-btns">
-      <button class="btn-ghost" onclick="closeModal('adminModal')">မလုပ်တော့ဘူး</button>
-      <button class="btn-primary" onclick="loginAdmin()">ဝင်မယ်</button>
-    </div>
-  </div>
-</div>
+          <!-- 🖼️ ဓာတ်ပုံနေရာ — Default ဖျောက်ထား (Admin မှ ထည့်မှသာ ပေါ်မည်) -->
+          <div class="photo-frame" id="photoFrame">
+            <div class="photo-inner">
+              <img id="invitationImage" alt="Invitation Photo">
+            </div>
+            <div class="photo-caption" data-key="imageCaption">ဖိတ်ကြားလွှာ အမှတ်တရဓာတ်ပုံ</div>
+          </div>
+          <div class="image-actions" id="imageActions"></div>
 
-<!-- Settings -->
-<div class="modal-overlay" id="settingModal">
-  <div class="modal-box">
-    <div class="settings-header">
-      <h3>⚙️ Settings</h3>
-      <button class="settings-x" onclick="closeModal('settingModal')" aria-label="Close">✕</button>
-    </div>
-    <div class="settings-scroll">
-      <div class="settings-section" id="adminSettings" style="display:none">
-        <div class="settings-section-title"><span>🔒</span> ADMIN</div>
-        <div class="settings-list">
-          <button class="settings-row" onclick="openAdManager()">
-            <span class="settings-icon">📢</span>
-            <span class="settings-text">
-              <span class="settings-title">ကြော်ငြာ စီမံရန်</span>
-              <span class="settings-desc">အောက်ခြေ ပြေးနေသည့် ကြော်ငြာများ</span>
-            </span>
-            <span class="settings-chevron">›</span>
-          </button>
-          <button class="settings-row" onclick="openPinModal()">
-            <span class="settings-icon">🔑</span>
-            <span class="settings-text">
-              <span class="settings-title">PIN ပြောင်းရန်</span>
-              <span class="settings-desc">Admin PIN အသစ် သတ်မှတ်ပါ</span>
-            </span>
-            <span class="settings-chevron">›</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <div class="settings-section-title"><span>⚙️</span> GENERAL</div>
-        <div class="settings-list">
-          <button class="settings-row" onclick="openThemeModeModal()">
-            <span class="settings-icon">🌗</span>
-            <span class="settings-text">
-              <span class="settings-title">Theme Mode</span>
-              <span class="settings-desc" id="themeModeDesc">Light / Dark / Auto</span>
-            </span>
-            <span class="settings-chevron">›</span>
-          </button>
-          <button class="settings-row" onclick="clearSeenItems()">
-            <span class="settings-icon">🔄</span>
-            <span class="settings-text">
-              <span class="settings-title">NEW Badge ပြန်ပြရန်</span>
-              <span class="settings-desc">ဖတ်ပြီးသား Badge များ ပြန်လည်ပြသပါ</span>
-            </span>
-            <span class="settings-chevron">›</span>
-          </button>
-          <button class="settings-row" onclick="resetFontSize()">
-            <span class="settings-icon">🔤</span>
-            <span class="settings-text">
-              <span class="settings-title">စာလုံးအရွယ် မူလအတိုင်း</span>
-              <span class="settings-desc">Font size ကို ပြန်လည်သတ်မှတ်ပါ</span>
-            </span>
-            <span class="settings-chevron">›</span>
-          </button>
-          <button class="settings-row" onclick="clearAllData()">
-            <span class="settings-icon">🧹</span>
-            <span class="settings-text">
-              <span class="settings-title">Local Data ရှင်းရန်</span>
-              <span class="settings-desc">Bookmarks, seen, recents ဖျက်ပါ</span>
-            </span>
-            <span class="settings-chevron">›</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="settings-section" id="adminSettings2" style="display:none">
-        <div class="settings-section-title"><span>📤</span> DATA</div>
-        <div class="settings-list">
-          <button class="settings-row" onclick="exportData()">
-            <span class="settings-icon">💾</span>
-            <span class="settings-text">
-              <span class="settings-title">JSON Backup ဒေါင်းရန်</span>
-              <span class="settings-desc">Item + Ad အားလုံး export လုပ်ပါ</span>
-            </span>
-            <span class="settings-chevron">›</span>
-          </button>
-          <button class="settings-row danger" onclick="logoutAdmin()">
-            <span class="settings-icon">🚪</span>
-            <span class="settings-text">
-              <span class="settings-title">Admin မှ ထွက်ရန်</span>
-              <span class="settings-desc">စီမံခန့်ခွဲခွင့် ပိတ်ပါ</span>
-            </span>
-            <span class="settings-chevron">›</span>
-          </button>
+          <p class="sub-info" data-key="subInfo">
+            ကြည်ညိုလေးမြတ်စွာဖြင့်<br>
+            ဖိတ်ကြားအပ်ပါသည်
+          </p>
+          <div class="seal" data-key="seal">ဖိတ်စာ<br>❦</div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- PIN Change -->
-<div class="modal-overlay" id="pinModal">
-  <div class="modal-box">
-    <h3>🔑 PIN အသစ် သတ်မှတ်ရန်</h3>
-    <input type="password" class="modal-input pin" id="newPinInput" placeholder="••••" inputmode="numeric" maxlength="4" autocomplete="off">
-    <div class="modal-btns">
-      <button class="btn-ghost" onclick="closeModal('pinModal')">မလုပ်တော့ဘူး</button>
-      <button class="btn-primary" onclick="saveNewPin()">သိမ်းမယ်</button>
-    </div>
-  </div>
-</div>
+    <!-- ကျောရိုး -->
+    <div class="spine"></div>
 
-<!-- Theme Mode -->
-<div class="modal-overlay" id="themeModeModal">
-  <div class="modal-box">
-    <h3>🌗 Theme Mode</h3>
-    <div class="settings-list" style="background:var(--bg);border-radius:14px;overflow:hidden;border:1px solid var(--border)">
-      <button class="settings-row" onclick="setThemeMode('light')">
-        <span class="settings-icon">☀️</span>
-        <span class="settings-text"><span class="settings-title">Light</span></span>
-        <span class="settings-chevron" id="tmLight">✓</span>
-      </button>
-      <button class="settings-row" onclick="setThemeMode('dark')">
-        <span class="settings-icon">🌙</span>
-        <span class="settings-text"><span class="settings-title">Dark</span></span>
-        <span class="settings-chevron" id="tmDark">✓</span>
-      </button>
-      <button class="settings-row" onclick="setThemeMode('auto')">
-        <span class="settings-icon">🔄</span>
-        <span class="settings-text">
-          <span class="settings-title">Auto</span>
-          <span class="settings-desc">System setting အတိုင်း လိုက်ပါ</span>
-        </span>
-        <span class="settings-chevron" id="tmAuto">✓</span>
-      </button>
-    </div>
-    <div class="modal-btns" style="margin-top:14px">
-      <button class="btn-ghost" onclick="closeModal('themeModeModal')">ပိတ်မယ်</button>
-    </div>
-  </div>
-</div>
+    <!-- ညာဘက် စာမျက်နှာ -->
+    <div class="page right">
+      <div class="frame">
+        <div class="right-content">
+          <div>
+            <div class="letter-salutation" data-key="salutation">
+              နမော တဿ ဘဂဝတော အရဟတော သမ္မာသမ္ဗုဒ္ဓဿ
+            </div>
+            <div class="letter-body" data-key="body">
+              ပွဲတော်ငံဒေသူကြွယ်၊ ပညာရှင်၊ သီတဂူဗုဒ္ဓကလာယာ၊ ကိုရီးယားနိုင်ငံတော်၊ ပုဂံမြို့ဒေသူတော်များ၏ သဒ္ဒါတော်၊ အရှင်သူမြတ်တို့အား မိသားစုအများအပြားမှ ကြည်ညိုလေးမြတ်လျက် <span class="highlight">K.K မိန်းမတော်နှင့် ဆန္ဒဖြိုး</span> မိသားစုတို့မှ မဏ္ဍပ်အတွင်းမှ ဒကာ/ဒကာမ တို့မှ စုပေါင်းမင်္ဂလာအခမ်းအနား ပြုလုပ်ကြပါရန် ဖိတ်ကြားအပ်ပါသည်။
+            </div>
 
-<!-- Add -->
-<div class="modal-overlay" id="addModal">
-  <div class="modal-box">
-    <h3>➕ အသစ်ထည့်ရန်</h3>
-    <select class="modal-select" id="addTarget"></select>
-    <input type="text" class="modal-input" id="addName" placeholder="အမည် ရိုက်ထည့်ပါ...">
-    <div class="modal-btns">
-      <button class="btn-ghost" onclick="closeModal('addModal')">မလုပ်တော့ဘူး</button>
-      <button class="btn-primary" onclick="submitAdd()">သိမ်းမယ်</button>
-    </div>
-  </div>
-</div>
+            <div class="details">
+              <div class="detail-row">
+                <span class="label">ခုနှစ်၊ လ၊ ရက်</span>
+                <span class="value" data-key="date">၁၃၈၅ ခုနှစ်၊ နယုန်လဆန်း (၆)ရက်၊ သောကြာနေ့ (18.11.2023)</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">အချိန်</span>
+                <span class="value" data-key="time">နံနက် (၉:၀၀) နာရီ</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">နေရာ</span>
+                <span class="value" data-key="location">ရန်ကုန်တိုင်းဒေသကြီး၊ လှိုင်မြို့နယ်၊ လှိုင်တက္ကသိုလ်နယ်မြေ၊ ဒဂုံဧရာအဆင်အတွင်း ကျေးရွာကြီးလမ်း</span>
+              </div>
+            </div>
+          </div>
 
-<!-- Rename -->
-<div class="modal-overlay" id="renameModal">
-  <div class="modal-box">
-    <h3 id="renameTitle">✏️ အမည်ပြောင်းရန်</h3>
-    <input type="text" class="modal-input" id="renameInput" placeholder="အမည် အသစ်...">
-    <div class="modal-btns">
-      <button class="btn-ghost" onclick="closeModal('renameModal')">မလုပ်တော့ဘူး</button>
-      <button class="btn-primary" onclick="confirmRename(event)">သိမ်းမယ်</button>
-    </div>
-  </div>
-</div>
-
-<!-- Category Action -->
-<div class="modal-overlay" id="catModal">
-  <div class="modal-box" style="padding:14px">
-    <h3 id="catModalTitle" style="margin-bottom:10px">📁 Category</h3>
-    <div class="settings-row" onclick="catAddItem()" style="border-radius:12px;border-bottom:none;margin-bottom:4px">
-      <span class="settings-icon">➕</span>
-      <span class="settings-text"><span class="settings-title">Item အသစ် ထည့်ရန်</span></span>
-    </div>
-    <div class="settings-row" onclick="catRename()" style="border-radius:12px;border-bottom:none;margin-bottom:4px">
-      <span class="settings-icon">✏️</span>
-      <span class="settings-text"><span class="settings-title">Category အမည်ပြောင်းရန်</span></span>
-    </div>
-    <div class="settings-row danger" onclick="catDelete()" style="border-radius:12px;border-bottom:none">
-      <span class="settings-icon">🗑️</span>
-      <span class="settings-text"><span class="settings-title">Category ဖျက်ရန်</span></span>
-    </div>
-    <div class="modal-btns" style="margin-top:14px">
-      <button class="btn-ghost" onclick="closeModal('catModal')">ပိတ်မယ်</button>
-    </div>
-  </div>
-</div>
-
-<!-- Delete Confirm -->
-<div class="modal-overlay" id="deleteModal">
-  <div class="modal-box">
-    <h3>🗑️ ဖျက်ရန် အတည်ပြုပါ</h3>
-    <p class="modal-desc" id="deleteDesc">ဒီအရာကို ဖျက်ချင်တာ သေချာလား?<br>ဖျက်ပြီးရင် ပြန်ယူလို့ မရနိုင်ပါ။</p>
-    <div class="modal-btns">
-      <button class="btn-ghost" onclick="closeModal('deleteModal')">မဖျက်တော့ဘူး</button>
-      <button class="btn-danger" onclick="confirmDelete(event)">ဖျက်မယ်</button>
-    </div>
-  </div>
-</div>
-
-<!-- AD MANAGER -->
-<div class="modal-overlay" id="adManagerModal">
-  <div class="modal-box">
-    <h3>📢 ကြော်ငြာ စီမံခန့်ခွဲမှု</h3>
-    <div class="modal-desc" style="margin-bottom:14px">အောက်ခြေမှာ ပြေးနေမည့် ကြော်ငြာများ</div>
-    <div id="adList"></div>
-    <button class="btn-primary" onclick="openAdForm()" style="width:100%;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:700;margin-bottom:10px;cursor:pointer">➕ ကြော်ငြာ အသစ် ထည့်ရန်</button>
-    <div class="modal-btns">
-      <button class="btn-ghost" onclick="closeModal('adManagerModal')">ပိတ်မယ်</button>
-    </div>
-  </div>
-</div>
-
-<!-- AD FORM -->
-<div class="modal-overlay" id="adFormModal">
-  <div class="modal-box">
-    <h3 id="adFormTitle">📢 ကြော်ငြာ အသစ်</h3>
-    <textarea class="modal-input" id="adText" placeholder="ကြော်ငြာ စာသား..."></textarea>
-    <input type="text" class="modal-input" id="adLink" placeholder="Link URL (မထည့်လည်း ရပါ)" inputmode="url">
-    <div style="margin-bottom:13px">
-      <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border-radius:12px;border:1px solid var(--border);cursor:pointer">
-        <input type="checkbox" id="adActive" style="width:18px;height:18px;cursor:pointer">
-        <span style="font-weight:700;font-size:14px">ကြော်ငြာ ပြသမည်</span>
-      </label>
-    </div>
-    <div class="img-preview-wrap" id="adImgPreview">
-      <img id="adImgEl" alt="">
-      <button class="img-preview-remove" onclick="removeAdImg()" type="button">✕</button>
-    </div>
-    <label class="btn-ghost" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:14px;border-radius:12px;cursor:pointer;font-weight:700;margin-bottom:13px;font-size:14px">
-      📷 ပုံ ရွေးချယ်ရန်
-      <input type="file" accept="image/*" style="display:none" onchange="uploadAdImg(event)">
-    </label>
-    <div class="modal-btns">
-      <button class="btn-ghost" onclick="closeModal('adFormModal')">မလုပ်တော့ဘူး</button>
-      <button class="btn-primary" onclick="saveAd(event)">သိမ်းမယ်</button>
-    </div>
-  </div>
-</div>
-
-<!-- Lightbox -->
-<div id="lightbox" onclick="closeLightbox()">
-  <button class="close-lb" onclick="closeLightbox()">✕</button>
-  <img src="" id="lightboxImg" alt="">
-</div>
-
-<!-- Toast -->
-<div class="toast" id="toast"></div>
-
-<script type="module">
-// ══════════════════════════════════════════
-// 🔥 FIREBASE
-// ══════════════════════════════════════════
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
-  collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot,
-  query, orderBy, setDoc, getDoc, writeBatch
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import {
-  getStorage, ref, uploadBytes, getDownloadURL, deleteObject
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
-
-// ⚠️ CONFIG — REPLACE WITH YOURS ⚠️
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-let db;
-try {
-  db = initializeFirestore(app, {
-    localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
-  });
-} catch (e) {
-  console.warn("Persistent cache fallback:", e);
-  const { getFirestore } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-  db = getFirestore(app);
-}
-const storage = getStorage(app);
-
-// ══════════════════════════════════════════
-// 📊 STATE
-// ══════════════════════════════════════════
-const DEFAULT_PIN = '1234';
-const LS = {
-  ADMIN: 'appIsAdmin',
-  FONT: 'myAppFontSize',
-  SEEN: 'myAppSeenItems',
-  EXPANDED: 'myAppExpanded',
-  THEME: 'myAppTheme',
-  THEME_MODE: 'myAppThemeMode',
-  STARRED: 'myAppStarred',
-  RECENT: 'myAppRecent',
-  VIEWS: 'myAppViews'
-};
-
-let appData = {};
-let adsData = [];
-let isAdmin = localStorage.getItem(LS.ADMIN) === 'true';
-let appPinHash = null;
-let currentFontSize = parseInt(localStorage.getItem(LS.FONT)) || 17;
-let seenItems = safeParse(localStorage.getItem(LS.SEEN), {});
-let expandedCats = new Set(safeParse(localStorage.getItem(LS.EXPANDED), []));
-let starredItems = new Set(safeParse(localStorage.getItem(LS.STARRED), []));
-let recentItems = safeParse(localStorage.getItem(LS.RECENT), []);
-let viewCounts = safeParse(localStorage.getItem(LS.VIEWS), {});
-let currentCat = null, currentItem = null, currentDocId = null;
-let pendingCat = null, pendingRename = null;
-let editingAdId = null, adImgUrl = '', adPendingFile = null;
-let isEditing = false, firstLoad = true;
-let searchTerm = '';
-let quickFilter = 'all';
-let themeMode = localStorage.getItem(LS.THEME_MODE) || 'light';
-
-// Ad link registry (fixes escaping bug)
-const adLinkRegistry = {};
-
-function safeParse(str, fallback) {
-  try { const v = JSON.parse(str); return v ?? fallback; } catch { return fallback; }
-}
-function esc(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function haptic(ms = 10) {
-  try { if (navigator.vibrate) navigator.vibrate(ms); } catch {}
-}
-
-// ══════════════════════════════════════════
-// 🌐 CONNECTION
-// ══════════════════════════════════════════
-function updateStatus() {
-  const dot = document.getElementById('statusDot');
-  const text = document.getElementById('statusText');
-  const online = navigator.onLine;
-  dot.classList.toggle('online', online);
-  dot.classList.toggle('offline', !online);
-  text.innerText = online ? 'အွန်လိုင်း ချိတ်ဆက်ပြီး' : 'အော့ဖ်လိုင်း (Offline)';
-}
-window.addEventListener('online', updateStatus);
-window.addEventListener('offline', updateStatus);
-updateStatus();
-
-// ══════════════════════════════════════════
-// 🍞 TOAST
-// ══════════════════════════════════════════
-let toastTimer = null;
-function showToast(msg, type = '') {
-  const toast = document.getElementById('toast');
-  toast.innerText = msg;
-  toast.className = 'toast show ' + type;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
-}
-
-// ══════════════════════════════════════════
-// 🔙 HISTORY GUARD
-// ══════════════════════════════════════════
-let overlayDepth = 0;
-let skipNextPop = false;
-function pushOverlayState() { overlayDepth++; try { history.pushState({ ov: overlayDepth }, ''); } catch {} }
-function popOverlayState() {
-  if (overlayDepth > 0) { overlayDepth--; skipNextPop = true; try { history.back(); } catch {} }
-}
-window.addEventListener('popstate', () => {
-  if (skipNextPop) { skipNextPop = false; return; }
-  overlayDepth = Math.max(0, overlayDepth - 1);
-  const modals = document.querySelectorAll('.modal-overlay.show');
-  if (modals.length) { modals[modals.length - 1].classList.remove('show'); return; }
-  if (document.getElementById('detail-view').classList.contains('active')) closeDetailUI();
-});
-
-// ══════════════════════════════════════════
-// 🌗 THEME (Light/Dark/Auto)
-// ══════════════════════════════════════════
-const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-function applyThemeMode() {
-  let useDark;
-  if (themeMode === 'auto') useDark = systemPrefersDark.matches;
-  else useDark = themeMode === 'dark';
-
-  if (useDark) {
-    document.body.setAttribute('data-theme', 'dark');
-    document.getElementById('themeBtn').innerText = '☀️';
-  } else {
-    document.body.removeAttribute('data-theme');
-    document.getElementById('themeBtn').innerText = '🌙';
-  }
-  updateThemeModeMarks();
-}
-function updateThemeModeMarks() {
-  ['Light','Dark','Auto'].forEach(m => {
-    const el = document.getElementById('tm' + m);
-    if (el) el.style.opacity = (themeMode === m.toLowerCase()) ? '1' : '0';
-  });
-  const desc = document.getElementById('themeModeDesc');
-  if (desc) desc.innerText = themeMode.charAt(0).toUpperCase() + themeMode.slice(1);
-}
-function toggleTheme() {
-  // Cycle: light → dark → auto → light
-  if (themeMode === 'light') setThemeMode('dark');
-  else if (themeMode === 'dark') setThemeMode('auto');
-  else setThemeMode('light');
-}
-function setThemeMode(mode) {
-  themeMode = mode;
-  localStorage.setItem(LS.THEME_MODE, mode);
-  applyThemeMode();
-  closeModal('themeModeModal');
-  haptic(8);
-  showToast('Theme: ' + mode.charAt(0).toUpperCase() + mode.slice(1), 'success');
-}
-function openThemeModeModal() {
-  updateThemeModeMarks();
-  openModal('themeModeModal');
-}
-systemPrefersDark.addEventListener('change', () => {
-  if (themeMode === 'auto') applyThemeMode();
-});
-
-// ══════════════════════════════════════════
-// 🔥 ITEMS LISTENER
-// ══════════════════════════════════════════
-function listenToItems() {
-  const q = query(collection(db, "items"), orderBy("addedAt", "desc"));
-  onSnapshot(q, (snapshot) => {
-    appData = {};
-    snapshot.forEach((docSnap) => {
-      const d = docSnap.data();
-      const cat = d.category || 'Other';
-      const name = d.name || 'Untitled';
-      if (!appData[cat]) appData[cat] = {};
-      appData[cat][name] = {
-        text: d.text || '',
-        img: d.img || '',
-        addedAt: d.addedAt || 0,
-        updatedAt: d.updatedAt || d.addedAt || 0,
-        docId: docSnap.id
-      };
-    });
-    renderList();
-    updateNotifDot();
-
-    // Refresh currently-open detail if data changed
-    if (currentCat && currentItem && appData[currentCat]?.[currentItem]) {
-      const d = appData[currentCat][currentItem];
-      const imgEl = document.getElementById('detailImg');
-      if (d.img && imgEl && imgEl.getAttribute('src') !== d.img) setDetailImage(d.img);
-    }
-    if (firstLoad) {
-      firstLoad = false;
-      setTimeout(() => document.getElementById('loading-screen').classList.add('hidden'), 350);
-    }
-  }, (error) => {
-    console.error("Firestore Error:", error);
-    document.getElementById('loading-screen').innerHTML = `
-      <div style="text-align:center;padding:24px">
-        <div style="font-size:52px">⚠️</div>
-        <div style="margin-top:14px;color:#ef4444;font-weight:700">Firebase ချိတ်ဆက်မှု မအောင်မြင်ပါ</div>
-        <div style="margin-top:8px;color:#6b7280;font-size:13px">Config ကို ပြန်စစ်ပါ</div>
-      </div>`;
-    showToast('Firebase Error', 'error');
-  });
-}
-
-// ══════════════════════════════════════════
-// 📢 ADS LISTENER
-// ══════════════════════════════════════════
-function listenToAds() {
-  const q = query(collection(db, "ads"), orderBy("createdAt", "desc"));
-  onSnapshot(q, (snap) => {
-    adsData = [];
-    snap.forEach(d => adsData.push({ id: d.id, ...d.data() }));
-    renderMarquee();
-  }, (err) => console.warn("Ads listener error:", err));
-}
-
-function renderMarquee() {
-  const marquee = document.getElementById('adMarquee');
-  const track = document.getElementById('adMarqueeTrack');
-  if (!marquee || !track) return;
-
-  const activeAds = adsData.filter(a => a.active !== false && a.text && a.text.trim());
-  if (!activeAds.length) {
-    marquee.classList.remove('show');
-    track.innerHTML = '';
-    return;
-  }
-  marquee.classList.add('show');
-
-  // ✅ FIX: Register links in JS map, use safe index-based onclick
-  Object.keys(adLinkRegistry).forEach(k => delete adLinkRegistry[k]);
-  activeAds.forEach((ad, i) => { adLinkRegistry['ad' + i] = ad.link || ''; });
-
-  const buildItem = (ad, i) => {
-    const hasLink = !!(ad.link && ad.link.trim());
-    const click = hasLink ? `onclick="openAdById('ad${i}')"` : '';
-    return `<span class="ad-marquee-item" ${click}>${esc(ad.text)}</span>`;
-  };
-  const seq = activeAds.map(buildItem).join('<span class="ad-marquee-sep">●</span>');
-  track.innerHTML = seq + '<span class="ad-marquee-sep">●</span>' + seq + '<span class="ad-marquee-sep">●</span>';
-
-  const totalLen = activeAds.reduce((s, a) => s + (a.text || '').length, 0);
-  const duration = Math.max(20, Math.min(55, totalLen * 0.7 + activeAds.length * 5));
-  track.style.setProperty('--marquee-duration', duration + 's');
-  track.style.animation = 'none';
-  void track.offsetWidth;
-  track.style.animation = '';
-}
-
-function openAdById(id) {
-  const url = adLinkRegistry[id];
-  if (!url) return;
-  let u = url.trim();
-  if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
-  haptic(15);
-  try { window.open(u, '_blank', 'noopener,noreferrer'); }
-  catch { showToast('Link ဖွင့်လို့ မရပါ', 'error'); }
-}
-
-// ══════════════════════════════════════════
-// 🎤 VOICE SEARCH
-// ══════════════════════════════════════════
-let recognition = null;
-let isRecording = false;
-
-function startVoiceSearch() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return showToast('ဒီ browser မှာ voice မရနိုင်ပါ', 'error');
-
-  if (isRecording && recognition) {
-    try { recognition.stop(); } catch {}
-    return;
-  }
-  recognition = new SR();
-  recognition.lang = 'my-MM';
-  recognition.interimResults = true;
-  recognition.continuous = false;
-
-  const overlay = document.getElementById('voiceOverlay');
-  const vtext = document.getElementById('voiceText');
-  const vbtn = document.getElementById('voiceBtn');
-
-  overlay.classList.add('show');
-  overlay.onclick = stopVoiceSearch;
-  vtext.innerText = 'ပြောပါ...';
-  vbtn.classList.add('rec');
-  isRecording = true;
-  haptic(20);
-
-  recognition.onresult = (e) => {
-    let finalT = '', interimT = '';
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      const t = e.results[i][0].transcript;
-      if (e.results[i].isFinal) finalT += t;
-      else interimT += t;
-    }
-    vtext.innerText = finalT || interimT || '...';
-    if (finalT) {
-      document.getElementById('search').value = finalT.trim();
-      onSearch();
-    }
-  };
-  recognition.onerror = (e) => {
-    console.warn('Voice error:', e.error);
-    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
-      showToast('Microphone ခွင့်ပြုချက် လိုအပ်ပါ', 'error');
-    } else if (e.error === 'no-speech') {
-      showToast('အသံ မကြားရပါ', 'error');
-    }
-    stopVoiceSearch();
-  };
-  recognition.onend = () => {
-    isRecording = false;
-    vbtn.classList.remove('rec');
-    setTimeout(() => { overlay.classList.remove('show'); vbtn.classList.remove('rec'); }, 500);
-  };
-
-  try { recognition.start(); }
-  catch (e) { console.warn(e); stopVoiceSearch(); }
-}
-
-function stopVoiceSearch() {
-  if (recognition) { try { recognition.stop(); } catch {} }
-  isRecording = false;
-  document.getElementById('voiceOverlay').classList.remove('show');
-  document.getElementById('voiceBtn').classList.remove('rec');
-}
-
-// ══════════════════════════════════════════
-// ⭐ STARRED & RECENT & VIEWS
-// ══════════════════════════════════════════
-function starKey(cat, item) { return cat + '::' + item; }
-function isStarred(cat, item) { return starredItems.has(starKey(cat, item)); }
-
-function toggleStarCurrent() {
-  if (!currentCat || !currentItem) return;
-  const key = starKey(currentCat, currentItem);
-  if (starredItems.has(key)) {
-    starredItems.delete(key);
-    showToast('⭐ ဖြုတ်ပြီးပါပြီ');
-  } else {
-    starredItems.add(key);
-    showToast('⭐ မှတ်ထားပြီးပါပြီ', 'success');
-  }
-  localStorage.setItem(LS.STARRED, JSON.stringify([...starredItems]));
-  updateStarButton();
-  renderList();
-  haptic(12);
-}
-
-function updateStarButton() {
-  const btn = document.getElementById('starBtn');
-  if (!btn || !currentCat || !currentItem) return;
-  const starred = isStarred(currentCat, currentItem);
-  btn.innerText = starred ? '⭐' : '☆';
-  btn.classList.toggle('active', starred);
-}
-
-function addRecent(cat, item) {
-  const key = starKey(cat, item);
-  recentItems = recentItems.filter(r => r !== key);
-  recentItems.unshift(key);
-  if (recentItems.length > 10) recentItems = recentItems.slice(0, 10);
-  localStorage.setItem(LS.RECENT, JSON.stringify(recentItems));
-}
-
-function bumpView(cat, item) {
-  const key = starKey(cat, item);
-  viewCounts[key] = (viewCounts[key] || 0) + 1;
-  localStorage.setItem(LS.VIEWS, JSON.stringify(viewCounts));
-}
-
-// ══════════════════════════════════════════
-// 🎛️ QUICK FILTERS
-// ══════════════════════════════════════════
-function setQuickFilter(f) {
-  quickFilter = f;
-  document.querySelectorAll('.chip').forEach(c => {
-    c.classList.toggle('active', c.dataset.filter === f);
-  });
-  renderList();
-  haptic(6);
-}
-
-// ══════════════════════════════════════════
-// 📢 AD MANAGER
-// ══════════════════════════════════════════
-function openAdManager() {
-  if (!isAdmin) return;
-  closeModal('settingModal');
-  setTimeout(() => { renderAdList(); openModal('adManagerModal'); }, 220);
-}
-
-function renderAdList() {
-  const el = document.getElementById('adList');
-  if (!el) return;
-  if (!adsData.length) {
-    el.innerHTML = '<div style="text-align:center;color:var(--sub);padding:24px 10px;font-size:13.5px">📭 ကြော်ငြာ မရှိသေးပါ<br><span style="font-size:12px">အောက်က ခလုတ်နှိပ်ပြီး ထည့်ပါ</span></div>';
-    return;
-  }
-  el.innerHTML = adsData.map(ad => {
-    const active = ad.active !== false;
-    return `<div class="ad-item">
-      <div class="ad-item-row">
-        ${ad.img ? `<img class="ad-item-thumb" src="${esc(ad.img)}" alt="">` : `<div class="ad-item-thumb-placeholder">📢</div>`}
-        <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(ad.text || '(စာသားမရှိ)')}</div>
-          <div style="font-size:11px;color:var(--sub);margin-top:2px">${active ? '🟢 ပြသနေသည်' : '⚪ ပိတ်ထားသည်'}${ad.link ? ' • 🔗' : ''}</div>
+          <div class="signature" data-key="signature">
+            လေးစားစွာဖြင့်<br>
+            <span class="sign-line">ဖိတ်ကြားသူများ</span>
+          </div>
         </div>
       </div>
-      <div class="ad-item-actions">
-        <button onclick="toggleAdActive('${ad.id}')">${active ? '⏸ ပိတ်' : '▶ ဖွင့်'}</button>
-        <button onclick="openAdForm('${ad.id}')">✏️ ပြင်</button>
-        <button class="danger" onclick="deleteAd('${ad.id}')">🗑️ ဖျက်</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================ TOAST ============================ -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- ============================ EDIT MODE INDICATOR ============================ -->
+<div class="edit-indicator" id="editIndicator">✏️ EDIT MODE - စာသားများကို နှိပ်၍ ပြင်နိုင်ပါသည်</div>
+
+<!-- ============================ ADMIN FLOATING BUTTON ============================ -->
+<button class="admin-toggle" id="adminToggle" onclick="openAdminPanel()" title="Admin">⚙</button>
+
+<!-- ============================ ADMIN PANEL ============================ -->
+<div class="admin-panel" id="adminPanel">
+  <h2>
+    ⚙ Admin Control
+    <button class="close-panel" onclick="closeAdminPanel()">✕</button>
+  </h2>
+
+  <div class="admin-section">
+    <h3>📝 Edit Mode</h3>
+    <div class="editor-toolbar" id="editorToolbar">
+      <div class="toolbar-title">✦ စာပိုဒ် / စာသားညှိရန် — စာသားတစ်ခုကို အရင်နှိပ်ပါ</div>
+      <div class="toolbar-row">
+        <button class="tool-btn" onclick="formatSelected('justifyLeft')">⬅ ဘယ်</button>
+        <button class="tool-btn" onclick="formatSelected('justifyCenter')">↔ အလယ်</button>
+        <button class="tool-btn" onclick="formatSelected('justifyRight')">➡ ညာ</button>
+        <button class="tool-btn" onclick="formatSelected('justifyFull')">☰ ညီ</button>
+        <button class="tool-btn" onclick="formatSelected('bold')"><b>B</b> Bold</button>
+        <button class="tool-btn" onclick="formatSelected('italic')"><i>I</i> Italic</button>
       </div>
-    </div>`;
-  }).join('');
-}
+      <div class="toolbar-row" style="margin-top:7px">
+        <select class="tool-select" id="fontSizeSelect" onchange="applyFontSize(this.value)">
+          <option value="">စာအရွယ်</option>
+          <option value="12px">12px</option><option value="14px">14px</option>
+          <option value="16px">16px</option><option value="18px">18px</option>
+          <option value="20px">20px</option><option value="24px">24px</option>
+          <option value="28px">28px</option><option value="32px">32px</option>
+        </select>
+        <select class="tool-select" id="lineHeightSelect" onchange="applyLineHeight(this.value)">
+          <option value="">စာကြောင်းအကွာ</option>
+          <option value="1.4">1.4</option><option value="1.6">1.6</option>
+          <option value="1.8">1.8</option><option value="2">2.0</option>
+          <option value="2.2">2.2</option><option value="2.5">2.5</option>
+        </select>
+        <button class="tool-btn" onclick="clearTextStyle()">↺ Style Reset</button>
+      </div>
+    </div>
+    <button class="admin-btn" id="editBtn" onclick="toggleEditMode()">
+      <span>✏️</span> <span id="editBtnText">Edit Mode ဖွင့်ရန်</span>
+    </button>
+    <button class="admin-btn primary" onclick="saveData()">
+      <span>💾</span> သိမ်းဆည်းရန် (Save)
+    </button>
+    <div class="status-msg" id="statusMsg"></div>
+  </div>
 
-function openAdForm(adId) {
-  if (!isAdmin) return;
-  editingAdId = adId || null;
-  adPendingFile = null;
-  const ad = adId ? adsData.find(a => a.id === adId) : null;
-  document.getElementById('adFormTitle').innerText = ad ? '✏️ ကြော်ငြာ ပြင်ဆင်ရန်' : '📢 ကြော်ငြာ အသစ်';
-  document.getElementById('adText').value = ad?.text || '';
-  document.getElementById('adLink').value = ad?.link || '';
-  document.getElementById('adActive').checked = ad ? (ad.active !== false) : true;
-  adImgUrl = ad?.img || '';
-  updateAdImgPreview();
-  if (document.getElementById('adManagerModal').classList.contains('show')) {
-    closeModal('adManagerModal');
-    setTimeout(() => openModal('adFormModal'), 240);
-  } else openModal('adFormModal');
-}
+  <!-- 🖼️ ဓာတ်ပုံ Control -->
+  <div class="admin-section">
+    <h3>🖼️ Photo Control</h3>
+    <button class="admin-btn primary" onclick="document.getElementById('imageInput').click()">
+      <span>📷</span> ဓာတ်ပုံ ထည့် / ပြောင်း
+    </button>
+    <button class="admin-btn" id="photoToggleBtn" onclick="togglePhotoVisibility()">
+      <span>👁️</span> ဓာတ်ပုံ မရှိသေးပါ
+    </button>
+    <button class="admin-btn danger" onclick="removeInvitationImage()">
+      <span>🗑️</span> ဓာတ်ပုံ ဖျက်ရန်
+    </button>
+    <div class="image-size-row">
+      <input id="imageWidth" type="number" min="120" max="600" step="10" placeholder="အကျယ် px" onchange="applyImageSize()">
+      <select id="imageFit" onchange="applyImageFit(this.value)">
+        <option value="cover">Cover (ဖြည့်)</option>
+        <option value="contain">Contain (အပြည့်)</option>
+      </select>
+    </div>
+    <img id="adminImagePreview" class="admin-image-preview" alt="Image Preview">
+    <div class="status-msg" id="imageStatus"></div>
+  </div>
 
-function updateAdImgPreview() {
-  const prev = document.getElementById('adImgPreview');
-  const img = document.getElementById('adImgEl');
-  if (!prev || !img) return;
-  if (adImgUrl) { img.src = adImgUrl; prev.classList.add('show'); }
-  else { prev.classList.remove('show'); img.removeAttribute('src'); }
-}
-function removeAdImg() { adImgUrl = ''; adPendingFile = null; updateAdImgPreview(); }
+  <div class="admin-section">
+    <h3>💾 Backup</h3>
+    <button class="admin-btn" onclick="exportData()">
+      <span>📤</span> JSON Export (ဒေါင်းလုပ်)
+    </button>
+    <button class="admin-btn" onclick="document.getElementById('importFile').click()">
+      <span>📥</span> JSON Import (တင်သွင်း)
+    </button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
 
-function uploadAdImg(event) {
-  const input = event.target;
-  const file = input.files && input.files[0];
-  try { input.value = ''; } catch {}
-  if (!file) return;
-  if (!file.type.startsWith('image/')) return showToast('ပုံဖိုင် သာ ရွေးပါ', 'error');
-  if (file.size > 3 * 1024 * 1024) return showToast('ပုံအရွယ်အစား 3MB အောက် ဖြစ်ရမည်', 'error');
-  adPendingFile = file;
-  const reader = new FileReader();
-  reader.onload = (e) => { adImgUrl = e.target.result; updateAdImgPreview(); };
-  reader.onerror = () => showToast('ပုံ ဖတ်လို့ မရပါ', 'error');
-  reader.readAsDataURL(file);
-}
+  <div class="admin-section">
+    <h3>🔒 Security</h3>
+    <button class="admin-btn" onclick="changePassword()">
+      <span>🔑</span> Password ပြောင်းရန်
+    </button>
+  </div>
 
-async function saveAd(event) {
-  if (!isAdmin) return;
-  const text = document.getElementById('adText').value.trim();
-  const link = document.getElementById('adLink').value.trim();
-  const active = document.getElementById('adActive').checked;
-  if (!text && !adImgUrl && !adPendingFile) return showToast('စာသား သို့မဟုတ် ပုံ အနည်းဆုံး တစ်ခု ထည့်ပါ', 'error');
-  const btn = event?.target;
-  if (btn) { btn.disabled = true; btn.innerText = 'သိမ်းနေသည်...'; }
-  try {
-    let imgUrl = adImgUrl;
-    if (adPendingFile) {
-      const ext = (adPendingFile.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 5) || 'jpg';
-      const fileName = `ads/${Date.now()}_${Math.random().toString(36).slice(2,8)}.${ext}`;
-      const storageRef = ref(storage, fileName);
-      const snap = await uploadBytes(storageRef, adPendingFile, { contentType: adPendingFile.type, cacheControl: 'public,max-age=31536000' });
-      imgUrl = await getDownloadURL(snap.ref);
-      const oldAd = editingAdId ? adsData.find(a => a.id === editingAdId) : null;
-      if (oldAd?.img && oldAd.img.includes('firebasestorage') && oldAd.img !== imgUrl) {
-        deleteObject(ref(storage, oldAd.img)).catch(() => {});
-      }
-    }
-    const data = { text, link, img: imgUrl || '', active, updatedAt: Date.now() };
-    if (editingAdId) {
-      await updateDoc(doc(db, "ads", editingAdId), data);
-      showToast('ကြော်ငြာ ပြင်ပြီးပါပြီ', 'success');
+  <div class="admin-section">
+    <h3>⚠️ Danger Zone</h3>
+    <button class="admin-btn danger" onclick="resetData()">
+      <span>🔄</span> မူလအတိုင်း ပြန်ထားရန် (Reset)
+    </button>
+    <button class="admin-btn danger" onclick="logout()">
+      <span>🚪</span> ထွက်ရန် (Logout)
+    </button>
+  </div>
+</div>
+
+<!-- ============================ ဓာတ်ပုံ File Input (Hidden) ============================ -->
+<input type="file" id="imageInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
+
+<!-- ============================ LOGIN MODAL ============================ -->
+<div class="modal-overlay" id="loginModal">
+  <div class="login-modal">
+    <div class="lock-icon">🔒</div>
+    <h2>Admin Login</h2>
+    <p>Password ထည့်သွင်းပါ</p>
+    <input type="password" class="password-input" id="passwordInput" placeholder="••••••••" onkeypress="if(event.key==='Enter') doLogin()">
+    <div class="login-error" id="loginError">❌ Password မှားနေပါသည်</div>
+    <button class="login-btn" onclick="doLogin()">ဝင်ရောက်ရန်</button>
+    <button class="cancel-btn" onclick="closeLogin()">ပယ်ဖျက်</button>
+  </div>
+</div>
+
+<script>
+  /* ============================ STATE ============================ */
+  const DEFAULT_PASSWORD = 'admin123';
+  let editMode = false;
+  let isAdmin = false;
+  let selectedEditable = null;
+
+  /* ============================ LANDING ============================ */
+  function enterBook() {
+    const landing = document.getElementById('landing');
+    landing.classList.add('fade-out');
+    setTimeout(() => {
+      landing.style.display = 'none';
+      document.getElementById('bookView').classList.add('active');
+      document.getElementById('adminToggle').classList.add('visible');
+      loadData();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 800);
+  }
+
+  /* ============================ TOAST ============================ */
+  function showToast(msg, type = '') {
+    const wrap = document.getElementById('toastWrap');
+    if (!wrap) return;
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = msg;
+    wrap.appendChild(el);
+    setTimeout(() => {
+      el.classList.add('out');
+      setTimeout(() => el.remove(), 320);
+    }, 2400);
+  }
+
+  /* ============================ ADMIN PANEL ============================ */
+  function openAdminPanel() {
+    if (!isAdmin) {
+      document.getElementById('loginModal').classList.add('open');
+      setTimeout(() => document.getElementById('passwordInput').focus(), 300);
     } else {
-      data.createdAt = Date.now();
-      await addDoc(collection(db, "ads"), data);
-      showToast('ကြော်ငြာ ထည့်ပြီးပါပြီ', 'success');
+      document.getElementById('adminPanel').classList.add('open');
     }
-    closeModal('adFormModal');
-    setTimeout(() => openAdManager(), 260);
-  } catch (e) {
-    console.error('Save ad error:', e);
-    showToast('သိမ်းဆည်းမှု မအောင်မြင်ပါ', 'error');
-  } finally {
-    if (btn) { btn.disabled = false; btn.innerText = 'သိမ်းမယ်'; }
   }
-}
+  function closeAdminPanel() {
+    document.getElementById('adminPanel').classList.remove('open');
+  }
 
-async function toggleAdActive(adId) {
-  const ad = adsData.find(a => a.id === adId);
-  if (!ad) return;
-  try {
-    await updateDoc(doc(db, "ads", adId), { active: ad.active === false ? true : false, updatedAt: Date.now() });
-    setTimeout(renderAdList, 120);
-  } catch { showToast('မအောင်မြင်ပါ', 'error'); }
-}
+  /* ============================ LOGIN ============================ */
+  function doLogin() {
+    const input = document.getElementById('passwordInput').value;
+    const savedPwd = localStorage.getItem('invitationPassword') || DEFAULT_PASSWORD;
+    const errEl = document.getElementById('loginError');
 
-async function deleteAd(adId) {
-  const ad = adsData.find(a => a.id === adId);
-  if (!ad) return;
-  if (!confirm('ဒီကြော်ငြာကို ဖျက်မှာ သေချာလား?')) return;
-  try {
-    if (ad.img && ad.img.includes('firebasestorage')) deleteObject(ref(storage, ad.img)).catch(() => {});
-    await deleteDoc(doc(db, "ads", adId));
-    showToast('ဖျက်ပြီးပါပြီ', 'success');
-    setTimeout(renderAdList, 120);
-  } catch { showToast('ဖျက်မှု မအောင်မြင်ပါ', 'error'); }
-}
+    if (input === savedPwd) {
+      isAdmin = true;
+      document.getElementById('loginModal').classList.remove('open');
+      document.getElementById('passwordInput').value = '';
+      errEl.classList.remove('show');
+      setTimeout(() => document.getElementById('adminPanel').classList.add('open'), 300);
+      showToast('🔓 Admin အဖြစ် ဝင်ရောက်ပြီးပါပြီ', 'success');
+    } else {
+      errEl.classList.add('show');
+      document.getElementById('passwordInput').value = '';
+      setTimeout(() => errEl.classList.remove('show'), 2500);
+    }
+  }
 
-// ══════════════════════════════════════════
-// 🔐 PIN
-// ══════════════════════════════════════════
-async function hashPin(pin) {
-  try {
-    const buf = new TextEncoder().encode('basicapp::v1::' + pin);
-    const h = await crypto.subtle.digest('SHA-256', buf);
-    return Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2, '0')).join('');
-  } catch { return 'plain:' + pin; }
-}
+  function closeLogin() {
+    document.getElementById('loginModal').classList.remove('open');
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('loginError').classList.remove('show');
+  }
 
-async function loadPinConfig() {
-  const cfgRef = doc(db, "settings", "config");
-  try {
-    const snap = await getDoc(cfgRef);
-    if (snap.exists()) {
-      const d = snap.data();
-      if (d.pinHash) { appPinHash = d.pinHash; return; }
-      if (d.pin) {
-        appPinHash = await hashPin(d.pin);
-        await setDoc(cfgRef, { pinHash: appPinHash }, { merge: true });
+  function logout() {
+    isAdmin = false;
+    if (editMode) toggleEditMode();
+    closeAdminPanel();
+    showToast('🚪 Logout အောင်မြင်ပါသည်', 'success');
+  }
+
+  /* ============================ EDIT MODE ============================ */
+  function toggleEditMode() {
+    editMode = !editMode;
+    const editableEls = document.querySelectorAll('[data-key]');
+    editableEls.forEach(el => { el.contentEditable = editMode; });
+
+    const btn = document.getElementById('editBtn');
+    const btnText = document.getElementById('editBtnText');
+    const indicator = document.getElementById('editIndicator');
+    const toolbar = document.getElementById('editorToolbar');
+
+    if (editMode) {
+      btn.classList.add('active');
+      btnText.textContent = 'Edit Mode ပိတ်ရန်';
+      indicator.classList.add('active');
+      toolbar.classList.add('show');
+      editableEls.forEach(el => {
+        el.addEventListener('blur', autoSave);
+        el.addEventListener('click', selectEditable);
+      });
+      showToast('✏️ Edit Mode ဖွင့်ပြီးပါပြီ');
+    } else {
+      btn.classList.remove('active');
+      btnText.textContent = 'Edit Mode ဖွင့်ရန်';
+      indicator.classList.remove('active');
+      toolbar.classList.remove('show');
+      editableEls.forEach(el => el.classList.remove('selected-editable'));
+      selectedEditable = null;
+      saveData(true);
+      showToast('💾 Edit Mode ပိတ်ပြီး သိမ်းဆည်းပြီးပါပြီ', 'success');
+    }
+    renderImageActions();
+  }
+
+  /* ==================== TEXT ALIGNMENT / TYPOGRAPHY ==================== */
+  function selectEditable(e) {
+    if (!editMode) return;
+    document.querySelectorAll('[data-key]').forEach(el => el.classList.remove('selected-editable'));
+    selectedEditable = e.currentTarget;
+    selectedEditable.classList.add('selected-editable');
+  }
+
+  function formatSelected(command) {
+    if (!selectedEditable) {
+      showToast('✏️ ပြင်လိုသော စာသားကို အရင်နှိပ်ပါ', 'error');
+      return;
+    }
+    selectedEditable.focus();
+    document.execCommand(command, false, null);
+    saveData(true);
+  }
+
+  function applyFontSize(value) {
+    if (!selectedEditable || !value) return;
+    selectedEditable.style.fontSize = value;
+    saveData(true);
+  }
+
+  function applyLineHeight(value) {
+    if (!selectedEditable || !value) return;
+    selectedEditable.style.lineHeight = value;
+    saveData(true);
+  }
+
+  function clearTextStyle() {
+    if (!selectedEditable) return;
+    selectedEditable.style.fontSize = '';
+    selectedEditable.style.lineHeight = '';
+    selectedEditable.style.fontWeight = '';
+    selectedEditable.style.fontStyle = '';
+    selectedEditable.style.textAlign = '';
+    saveData(true);
+    showToast('↺ Style ပြန်လည်ရှင်းလင်းပြီးပါပြီ');
+  }
+
+  /* ==========================================================
+     🖼️ PHOTO SYSTEM  —  Default Hidden
+     ========================================================== */
+  function hasPhoto() {
+    return !!localStorage.getItem('invitationImage');
+  }
+  function isPhotoHidden() {
+    return localStorage.getItem('invitationImageHidden') === '1';
+  }
+
+  /* ဓာတ်ပုံ ပေါ်မပေါ် ဆုံးဖြတ်သည် — ပုံမရှိလျှင် လုံးဝ ဖျောက် */
+  function updatePhotoVisibility() {
+    const frame = document.getElementById('photoFrame');
+    const show = hasPhoto() && !isPhotoHidden();
+    frame.classList.toggle('visible', show);
+    renderImageActions();
+    updatePhotoToggleBtn();
+  }
+
+  /* Edit Mode အတွင်း ခလုတ်ငယ်များ ပြခြင်း */
+  function renderImageActions() {
+    const wrap = document.getElementById('imageActions');
+    if (!wrap) return;
+
+    if (!editMode) {
+      wrap.classList.remove('show');
+      wrap.innerHTML = '';
+      return;
+    }
+    wrap.classList.add('show');
+
+    if (!hasPhoto()) {
+      wrap.innerHTML =
+        '<button class="mini-btn" type="button" onclick="document.getElementById(\'imageInput\').click()">📷 ဓာတ်ပုံ ထည့်ရန်</button>';
+    } else {
+      const hidden = isPhotoHidden();
+      wrap.innerHTML =
+        '<button class="mini-btn" type="button" onclick="document.getElementById(\'imageInput\').click()">📷 ပြောင်းရန်</button>' +
+        '<button class="mini-btn" type="button" onclick="togglePhotoVisibility()">' +
+          (hidden ? '👁️ ပြရန်' : '🙈 ဖျောက်ရန်') +
+        '</button>' +
+        '<button class="mini-btn" type="button" onclick="removeInvitationImage()">🗑️ ဖျက်ရန်</button>';
+    }
+  }
+
+  /* Admin Panel ရှိ Toggle ခလုတ် အခြေအနေ */
+  function updatePhotoToggleBtn() {
+    const btn = document.getElementById('photoToggleBtn');
+    if (!btn) return;
+    if (!hasPhoto()) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>👁️</span> ဓာတ်ပုံ မရှိသေးပါ';
+    } else if (isPhotoHidden()) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>👁️</span> ဓာတ်ပုံ ပြရန်';
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = '<span>🙈</span> ဓာတ်ပုံ ဖျောက်ရန်';
+    }
+  }
+
+  /* ဓာတ်ပုံ ဖျောက် / ပြ */
+  function togglePhotoVisibility() {
+    if (!hasPhoto()) {
+      showToast('📷 ဓာတ်ပုံ အရင်ထည့်ပါ', 'error');
+      return;
+    }
+    const wasHidden = isPhotoHidden();
+    localStorage.setItem('invitationImageHidden', wasHidden ? '0' : '1');
+    updatePhotoVisibility();
+    showToast(wasHidden ? '👁️ ဓာတ်ပုံ ပြပြီးပါပြီ' : '🙈 ဓာတ်ပုံ ဖျောက်ပြီးပါပြီ', 'success');
+  }
+
+  /* ဓာတ်ပုံ တင်သွင်းခြင်း */
+  function handleImageUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      showImageStatus('❌ Image file ပဲ ရွေးပါ', 'error');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showImageStatus('❌ ပုံအရွယ်အစား 5MB အောက်ဖြစ်ရပါမယ်', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const data = e.target.result;
+      try {
+        localStorage.setItem('invitationImage', data);
+        localStorage.setItem('invitationImageHidden', '0'); // အသစ်တင်လျှင် အလိုအလျောက် ပြ
+      } catch (err) {
+        showImageStatus('❌ Storage ပြည့်နေပါသည် (ပုံအရွယ်လျှော့ပါ)', 'error');
         return;
       }
-    }
-    appPinHash = await hashPin(DEFAULT_PIN);
-    await setDoc(cfgRef, { pinHash: appPinHash }, { merge: true });
-  } catch (e) {
-    console.warn("PIN load error:", e);
-    appPinHash = await hashPin(DEFAULT_PIN);
-  }
-}
-
-// ══════════════════════════════════════════
-// 🆕 NEW BADGE
-// ══════════════════════════════════════════
-function isItemNew(cat, item) {
-  const data = appData[cat]?.[item];
-  if (!data) return false;
-  const ts = data.updatedAt || data.addedAt || 0;
-  return ts > (seenItems[starKey(cat, item)] || 0);
-}
-function markAsSeen(cat, item) {
-  const data = appData[cat]?.[item];
-  if (!data) return;
-  seenItems[starKey(cat, item)] = data.updatedAt || data.addedAt || Date.now();
-  localStorage.setItem(LS.SEEN, JSON.stringify(seenItems));
-  refreshBadges();
-}
-function hasAnyNew() {
-  for (const cat in appData)
-    for (const item in appData[cat])
-      if (isItemNew(cat, item)) return true;
-  return false;
-}
-function updateNotifDot() {
-  const dot = document.getElementById('settingDot');
-  if (dot) dot.classList.toggle('show', !isAdmin && hasAnyNew());
-}
-function refreshBadges() { renderList(); }
-function clearSeenItems() {
-  seenItems = {};
-  localStorage.setItem(LS.SEEN, JSON.stringify(seenItems));
-  renderList();
-  closeModal('settingModal');
-  showToast('Badge များ ပြန်လည် ပြသပါပြီ', 'success');
-}
-
-// ══════════════════════════════════════════
-// 🔐 ADMIN UI
-// ══════════════════════════════════════════
-function updateAdminUI() {
-  const $ = id => document.getElementById(id);
-  const toggle = (el, show) => el && el.classList.toggle('hidden', !show);
-  const setDisplay = (el, show) => { if (el) el.style.display = show ? 'block' : 'none'; };
-
-  toggle($('addBtn'), isAdmin);
-  if ($('adminBtn')) {
-    $('adminBtn').innerText = isAdmin ? '🔓' : '🔒';
-    $('adminBtn').classList.toggle('admin-on', isAdmin);
-  }
-  toggle($('photoBtn'), isAdmin);
-  toggle($('editBtn'), isAdmin);
-  toggle($('deleteBtn'), isAdmin);
-
-  // Share button — only when navigator.share available
-  toggle($('shareBtn'), !!navigator.share);
-
-  setDisplay($('adminSettings'), isAdmin);
-  setDisplay($('adminSettings2'), isAdmin);
-
-  const title = $('detailTitle');
-  if (title) title.classList.toggle('editable', isAdmin);
-  if (!isAdmin && isEditing) toggleEdit();
-}
-
-function toggleAdminModal() {
-  if (isAdmin) {
-    if (confirm("Admin မှ ထွက်ရန် သေချာလား?")) logoutAdmin();
-  } else {
-    document.getElementById('pinInput').value = '';
-    openModal('adminModal');
-    setTimeout(() => { try { document.getElementById('pinInput').focus({ preventScroll: true }); } catch {} }, 320);
-  }
-}
-
-function logoutAdmin() {
-  isAdmin = false;
-  localStorage.setItem(LS.ADMIN, 'false');
-  closeModal('settingModal');
-  updateAdminUI();
-  renderList();
-  showToast('Admin မှ ထွက်ပြီးပါပြီ');
-}
-
-async function loginAdmin() {
-  const pin = document.getElementById('pinInput').value.trim();
-  if (pin.length !== 4) return showToast('ဂဏန်း ၄ လုံး ရိုက်ထည့်ပါ', 'error');
-  if (!appPinHash) await loadPinConfig();
-  const inputHash = await hashPin(pin);
-  if (inputHash === appPinHash) {
-    isAdmin = true;
-    localStorage.setItem(LS.ADMIN, 'true');
-    closeModal('adminModal');
-    updateAdminUI();
-    renderList();
-    haptic(30);
-    showToast('Admin အဖြစ် ဝင်ရောက်ပြီးပါပြီ', 'success');
-  } else {
-    showToast('PIN မှားနေပါတယ်', 'error');
-    document.getElementById('pinInput').value = '';
-    haptic([40, 30, 40]);
-  }
-}
-
-// ══════════════════════════════════════════
-// ⚙️ SETTINGS
-// ══════════════════════════════════════════
-function openSettings() {
-  updateAdminUI();
-  openModal('settingModal');
-}
-
-function openPinModal() {
-  closeModal('settingModal');
-  document.getElementById('newPinInput').value = '';
-  setTimeout(() => {
-    openModal('pinModal');
-    setTimeout(() => { try { document.getElementById('newPinInput').focus({ preventScroll: true }); } catch {} }, 320);
-  }, 220);
-}
-
-async function saveNewPin() {
-  const newPin = document.getElementById('newPinInput').value.trim();
-  if (!/^\d{4}$/.test(newPin)) return showToast('ဂဏန်း ၄ လုံး အတိအကျ ရိုက်ထည့်ပါ', 'error');
-  try {
-    const newHash = await hashPin(newPin);
-    await setDoc(doc(db, "settings", "config"), { pinHash: newHash }, { merge: true });
-    appPinHash = newHash;
-    closeModal('pinModal');
-    showToast('PIN အသစ် Cloud ပေါ်တွင် သိမ်းပြီးပါပြီ', 'success');
-  } catch { showToast('PIN သိမ်းဆည်းမှု မအောင်မြင်ပါ', 'error'); }
-}
-
-function resetFontSize() {
-  currentFontSize = 17;
-  localStorage.setItem(LS.FONT, currentFontSize);
-  applyFontSize();
-  closeModal('settingModal');
-  showToast('စာလုံးအရွယ် မူလအတိုင်း ပြန်ထားပြီ', 'success');
-}
-
-function clearAllData() {
-  if (!confirm('Local Data အားလုံး ရှင်းမှာ သေချာလား?\n(Bookmarks, Seen, Recent, Views)')) return;
-  localStorage.removeItem(LS.SEEN);
-  localStorage.removeItem(LS.STARRED);
-  localStorage.removeItem(LS.RECENT);
-  localStorage.removeItem(LS.VIEWS);
-  seenItems = {}; starredItems = new Set(); recentItems = []; viewCounts = {};
-  renderList();
-  closeModal('settingModal');
-  showToast('Local Data ရှင်းပြီးပါပြီ', 'success');
-}
-
-// ══════════════════════════════════════════
-// 📤 EXPORT JSON
-// ══════════════════════════════════════════
-function exportData() {
-  try {
-    const payload = {
-      exportedAt: new Date().toISOString(),
-      version: '1.0',
-      items: [],
-      ads: []
+      loadImage();
+      loadImageSettings();
+      showImageStatus('✅ ပုံထည့်ပြီးပါပြီ', 'success');
+      showToast('🖼️ ဓာတ်ပုံ ထည့်ပြီးပါပြီ', 'success');
+      event.target.value = '';
     };
-    Object.keys(appData).forEach(cat => {
-      Object.keys(appData[cat]).forEach(item => {
-        const d = appData[cat][item];
-        payload.items.push({
-          category: cat,
-          name: item,
-          text: d.text,
-          img: d.img,
-          addedAt: d.addedAt,
-          updatedAt: d.updatedAt
-        });
-      });
-    });
-    adsData.forEach(a => payload.ads.push({
-      text: a.text, link: a.link, img: a.img, active: a.active, createdAt: a.createdAt
-    }));
+    reader.readAsDataURL(file);
+  }
 
+  /* ဓာတ်ပုံ ဖျက်ခြင်း — လုံးဝ ပြန်ဖျောက် */
+  function removeInvitationImage() {
+    localStorage.removeItem('invitationImage');
+    localStorage.removeItem('invitationImageHidden');
+    localStorage.removeItem('invitationImageStyle');
+
+    const img = document.getElementById('invitationImage');
+    const preview = document.getElementById('adminImagePreview');
+    const frame = document.getElementById('photoFrame');
+
+    img.removeAttribute('src');
+    img.style.objectFit = '';
+    frame.style.width = '';
+    frame.classList.remove('visible');
+
+    preview.removeAttribute('src');
+    preview.style.display = 'none';
+
+    document.getElementById('imageWidth').value = '';
+    document.getElementById('imageFit').value = 'cover';
+
+    updatePhotoVisibility();
+    showImageStatus('🗑️ ပုံဖျက်ပြီးပါပြီ', 'success');
+    showToast('🗑️ ဓာတ်ပုံ ဖျက်ပြီးပါပြီ', 'success');
+  }
+
+  /* ဓာတ်ပုံ Load */
+  function loadImage() {
+    const data = localStorage.getItem('invitationImage');
+    const img = document.getElementById('invitationImage');
+    const preview = document.getElementById('adminImagePreview');
+
+    if (data) {
+      img.src = data;
+      preview.src = data;
+      preview.style.display = 'block';
+    } else {
+      img.removeAttribute('src');
+      preview.removeAttribute('src');
+      preview.style.display = 'none';
+    }
+    updatePhotoVisibility();
+  }
+
+  /* အရွယ်အစား */
+  function applyImageSize() {
+    const w = parseInt(document.getElementById('imageWidth').value, 10);
+    const frame = document.getElementById('photoFrame');
+    if (w >= 120 && w <= 600) frame.style.width = w + 'px';
+    saveImageSettings();
+  }
+
+  function applyImageFit(v) {
+    document.getElementById('invitationImage').style.objectFit = v || 'cover';
+    saveImageSettings();
+  }
+
+  function saveImageSettings() {
+    const frame = document.getElementById('photoFrame');
+    const img = document.getElementById('invitationImage');
+    localStorage.setItem('invitationImageStyle', JSON.stringify({
+      width: frame.style.width || '',
+      fit: img.style.objectFit || 'cover'
+    }));
+  }
+
+  function loadImageSettings() {
+    try {
+      const s = JSON.parse(localStorage.getItem('invitationImageStyle') || '{}');
+      const frame = document.getElementById('photoFrame');
+      const img = document.getElementById('invitationImage');
+      if (s.width) frame.style.width = s.width;
+      if (s.fit) img.style.objectFit = s.fit;
+      const w = parseInt(s.width, 10);
+      if (w) document.getElementById('imageWidth').value = w;
+      document.getElementById('imageFit').value = s.fit || 'cover';
+    } catch (e) {}
+  }
+
+  function showImageStatus(msg, type) {
+    const el = document.getElementById('imageStatus');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'status-msg ' + type;
+    setTimeout(() => el.className = 'status-msg', 2500);
+  }
+
+  function autoSave() {
+    if (editMode) saveData(true);
+  }
+
+  /* ============================ SAVE / LOAD ============================ */
+  function saveData(silent = false) {
+    const data = {};
+    document.querySelectorAll('[data-key]').forEach(el => {
+      data[el.dataset.key] = el.innerHTML;
+    });
+    try {
+      localStorage.setItem('invitationData', JSON.stringify(data));
+      if (!silent) {
+        showStatus('✅ သိမ်းဆည်းပြီးပါပြီ', 'success');
+        showToast('💾 သိမ်းဆည်းပြီးပါပြီ', 'success');
+      }
+    } catch (e) {
+      showStatus('❌ သိမ်းဆည်းမှု မအောင်မြင်ပါ', 'error');
+      showToast('❌ သိမ်းဆည်းမှု မအောင်မြင်ပါ', 'error');
+    }
+  }
+
+  function loadData() {
+    loadImageSettings();
+    loadImage();
+    const saved = localStorage.getItem('invitationData');
+    if (!saved) { renderImageActions(); return; }
+    try {
+      const data = JSON.parse(saved);
+      document.querySelectorAll('[data-key]').forEach(el => {
+        if (data[el.dataset.key] !== undefined) {
+          el.innerHTML = data[el.dataset.key];
+        }
+      });
+    } catch (e) { console.warn('Load failed', e); }
+    renderImageActions();
+  }
+
+  function resetData() {
+    if (!confirm('⚠️ သိမ်းထားတဲ့ data အားလုံး ဖျက်ပြီး မူလအတိုင်း ပြန်ထားမှာ သေချာပါသလား?')) return;
+    localStorage.removeItem('invitationData');
+    localStorage.removeItem('invitationImage');
+    localStorage.removeItem('invitationImageHidden');
+    localStorage.removeItem('invitationImageStyle');
+    location.reload();
+  }
+
+  /* ============================ EXPORT / IMPORT ============================ */
+  function exportData() {
+    const payload = {
+      invitationData: JSON.parse(localStorage.getItem('invitationData') || '{}'),
+      invitationImage: localStorage.getItem('invitationImage') || '',
+      invitationImageHidden: localStorage.getItem('invitationImageHidden') || '0',
+      invitationImageStyle: JSON.parse(localStorage.getItem('invitationImageStyle') || '{}')
+    };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
     a.href = url;
-    a.download = `basicapp-backup-${ts}.json`;
-    document.body.appendChild(a);
+    a.download = 'invitation-backup-' + new Date().toISOString().slice(0, 10) + '.json';
     a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast('📤 Backup ဒေါင်းပြီးပါပြီ', 'success');
-  } catch (e) {
-    console.error(e);
-    showToast('Export မအောင်မြင်ပါ', 'error');
+    URL.revokeObjectURL(url);
+    showStatus('📤 Export ပြီးပါပြီ', 'success');
+    showToast('📤 Export ပြီးပါပြီ', 'success');
   }
-}
 
-// ══════════════════════════════════════════
-// 📝 FONT SIZE
-// ══════════════════════════════════════════
-function applyFontSize() {
-  document.documentElement.style.setProperty('--font-size', currentFontSize + 'px');
-}
-function changeFontSize(step) {
-  currentFontSize = Math.min(30, Math.max(12, currentFontSize + step));
-  localStorage.setItem(LS.FONT, currentFontSize);
-  applyFontSize();
-  haptic(8);
-}
+  function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (imported.invitationData) {
+          localStorage.setItem('invitationData', JSON.stringify(imported.invitationData));
+          localStorage.setItem('invitationImage', imported.invitationImage || '');
+          localStorage.setItem('invitationImageHidden', imported.invitationImageHidden || '0');
+          localStorage.setItem('invitationImageStyle', JSON.stringify(imported.invitationImageStyle || {}));
+        } else {
+          localStorage.setItem('invitationData', JSON.stringify(imported));
+        }
+        showStatus('📥 Import အောင်မြင်ပါသည် - Reload ဖြစ်ပါမည်', 'success');
+        showToast('📥 Import အောင်မြင်ပါသည်', 'success');
+        setTimeout(() => location.reload(), 1200);
+      } catch (err) {
+        showStatus('❌ File ပုံစံ မမှန်ပါ', 'error');
+        showToast('❌ File ပုံစံ မမှန်ပါ', 'error');
+      }
+    };
+    reader.readAsText(file);
+  }
 
-// ══════════════════════════════════════════
-// 📑 RENDER LIST (with filters)
-// ══════════════════════════════════════════
-function renderList() {
-  const list = document.getElementById('catsList');
-  if (!list) return;
-
-  const f = searchTerm.trim().toLowerCase();
-  let cats = Object.keys(appData);
-
-  // Quick filter: recent
-  if (quickFilter === 'recent') {
-    // show only categories containing recent items
-    if (!recentItems.length) {
-      list.innerHTML = `<div class="empty-state"><span class="big">🕐</span>မကြာသေးမီ ကြည့်ခဲ့သည့် item မရှိသေးပါ</div>`;
-      updateNotifDot();
+  /* ============================ PASSWORD ============================ */
+  function changePassword() {
+    const current = prompt('လက်ရှိ Password ထည့်ပါ:');
+    if (!current) return;
+    const savedPwd = localStorage.getItem('invitationPassword') || DEFAULT_PASSWORD;
+    if (current !== savedPwd) {
+      showStatus('❌ လက်ရှိ Password မှားနေပါသည်', 'error');
       return;
     }
+    const newPwd = prompt('Password အသစ် ထည့်ပါ (အနည်းဆုံး ၄ လုံး):');
+    if (!newPwd || newPwd.length < 4) {
+      showStatus('❌ Password သည် အနည်းဆုံး ၄ လုံး ရှိရပါမည်', 'error');
+      return;
+    }
+    const confirmPwd = prompt('Password အသစ် ထပ်မံ အတည်ပြုပါ:');
+    if (newPwd !== confirmPwd) {
+      showStatus('❌ Password နှစ်ခု မတူညီပါ', 'error');
+      return;
+    }
+    localStorage.setItem('invitationPassword', newPwd);
+    showStatus('✅ Password ပြောင်းပြီးပါပြီ', 'success');
+    showToast('🔑 Password ပြောင်းပြီးပါပြီ', 'success');
   }
 
-  if (!cats.length) {
-    list.innerHTML = `<div class="empty-state"><span class="big">📭</span>ဒေတာ မရှိသေးပါ။<br>Admin ဝင်ပြီး ➕ နှိပ်ကာ အသစ်ထည့်ပါ။</div>`;
-    updateNotifDot();
-    return;
+  /* ============================ STATUS ============================ */
+  function showStatus(msg, type) {
+    const el = document.getElementById('statusMsg');
+    el.textContent = msg;
+    el.className = 'status-msg ' + type;
+    setTimeout(() => { el.className = 'status-msg'; }, 3000);
   }
 
-  // Starred filter — collect keys
-  if (quickFilter === 'starred' && !starredItems.size) {
-    list.innerHTML = `<div class="empty-state"><span class="big">⭐</span>မှတ်ထားသည့် item မရှိသေးပါ</div>`;
-    updateNotifDot();
-    return;
-  }
-
-  let html = '';
-  let totalVisible = 0;
-
-  cats.forEach(cat => {
-    const items = Object.keys(appData[cat]);
-    const catMatch = !f || cat.toLowerCase().includes(f);
-
-    const visibleItems = items.filter(it => {
-      // Quick filters
-      if (quickFilter === 'new' && !isItemNew(cat, it)) return false;
-      if (quickFilter === 'starred' && !isStarred(cat, it)) return false;
-      if (quickFilter === 'recent' && !recentItems.includes(starKey(cat, it))) return false;
-      // Search
-      if (!f) return true;
-      if (catMatch) return true;
-      if (it.toLowerCase().includes(f)) return true;
-      return (appData[cat][it].text || '').toLowerCase().includes(f);
-    });
-
-    if (!visibleItems.length && !catMatch) return;
-    // For filters, if no matching items, skip
-    if ((quickFilter !== 'all') && !visibleItems.length) return;
-    totalVisible++;
-
-    const catHasNew = items.some(it => isItemNew(cat, it));
-    const isOpen = expandedCats.has(cat) || (f && visibleItems.length) || quickFilter !== 'all';
-    const safeCat = esc(cat);
-    const safeCatData = encodeURIComponent(cat);
-
-    html += `<div class="cat-box" data-cat="${safeCat}">
-      <div class="cat-header${isOpen ? ' active' : ''}" onclick="toggleCat(this,'${safeCatData}')">
-        <div class="cat-header-left">
-          <span>📁</span>
-          <span class="cat-name">${safeCat}</span>
-          ${catHasNew ? '<span class="new-badge">NEW</span>' : ''}
-        </div>
-        <div class="cat-right">
-          <span class="cat-count">${items.length}</span>
-          ${isAdmin ? `<button class="cat-menu-btn" onclick="event.stopPropagation();openCatMenu('${safeCatData}')">⋮</button>` : ''}
-          <span class="icon">▼</span>
-        </div>
-      </div>
-      <div class="sub-items${isOpen ? ' open' : ''}">`;
-
-    visibleItems.forEach(item => {
-      const isNew = isItemNew(cat, item);
-      const isStar = isStarred(cat, item);
-      const itemData = appData[cat][item];
-      const thumb = itemData.img
-        ? `<img class="item-thumb" src="${esc(itemData.img)}" alt="" loading="lazy" onerror="this.style.display='none'">`
-        : `<span>📄</span>`;
-      html += `<div class="item-row" data-item="${esc(item)}" onclick="openDetail('${safeCatData}','${encodeURIComponent(item)}')">
-        <div class="item-row-left">
-          ${thumb}
-          <span class="item-name">${esc(item)}</span>
-          ${isStar ? '<span class="star-icon">⭐</span>' : ''}
-          ${isNew ? '<span class="new-badge">NEW</span>' : ''}
-        </div>
-        <span class="arrow">▶</span>
-      </div>`;
-    });
-
-    html += `</div></div>`;
+  /* ============================ KEYBOARD SHORTCUTS ============================ */
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's' && isAdmin) {
+      e.preventDefault();
+      saveData();
+    }
+    if (e.key === 'Escape') {
+      closeAdminPanel();
+      closeLogin();
+    }
   });
 
-  if (!totalVisible) {
-    let msg;
-    if (quickFilter === 'starred') msg = '⭐ မှတ်ထားသည့် item မရှိပါ';
-    else if (quickFilter === 'recent') msg = '🕐 မကြာသေးမီ မရှိပါ';
-    else if (quickFilter === 'new') msg = '🆕 အသစ် မရှိပါ';
-    else msg = `"${esc(searchTerm)}" နှင့် ကိုက်ညီသော ရလဒ် မတွေ့ပါ။`;
-    list.innerHTML = `<div class="empty-state"><span class="big">🔍</span>${msg}</div>`;
-    updateNotifDot();
-    return;
-  }
-  list.innerHTML = html;
-  updateNotifDot();
-}
-
-function toggleCat(headerEl, encodedCat) {
-  const cat = decodeURIComponent(encodedCat);
-  headerEl.classList.toggle('active');
-  headerEl.nextElementSibling.classList.toggle('open');
-  if (headerEl.classList.contains('active')) expandedCats.add(cat);
-  else expandedCats.delete(cat);
-  localStorage.setItem(LS.EXPANDED, JSON.stringify([...expandedCats]));
-  haptic(6);
-}
-
-// ══════════════════════════════════════════
-// 📖 DETAIL VIEW
-// ══════════════════════════════════════════
-function setDetailImage(src) {
-  const imgEl = document.getElementById('detailImg');
-  if (!imgEl) return;
-  if (!src) {
-    imgEl.removeAttribute('src');
-    imgEl.style.display = 'none';
-    imgEl.classList.remove('loading', 'img-error');
-    return;
-  }
-  let url = src;
-  if (url.includes('firebasestorage') && !url.includes('_t=')) {
-    url += (url.includes('?') ? '&' : '?') + '_t=' + Date.now();
-  }
-  imgEl.classList.remove('img-error');
-  imgEl.classList.add('loading');
-  imgEl.style.display = 'block';
-  const tmp = new Image();
-  tmp.onload = () => { imgEl.src = url; imgEl.classList.remove('loading'); };
-  tmp.onerror = () => {
-    imgEl.classList.remove('loading');
-    imgEl.classList.add('img-error');
-    imgEl.removeAttribute('src');
-    imgEl.alt = '⚠️ ပုံ ဖတ်လို့ မရပါ';
-    imgEl.style.display = 'flex';
-  };
-  tmp.src = url;
-}
-
-function openDetail(encodedCat, encodedItem) {
-  const cat = decodeURIComponent(encodedCat);
-  const item = decodeURIComponent(encodedItem);
-  const data = appData[cat]?.[item];
-  if (!data) return;
-
-  currentCat = cat; currentItem = item; currentDocId = data.docId;
-
-  document.getElementById('detailTitle').innerText = item;
-  document.getElementById('detailText').innerText = data.text || '(အကြောင်းအရာ မရှိသေးပါ)';
-  setDetailImage(data.img || '');
-
-  // Meta with view count
-  const meta = document.getElementById('detailMeta');
-  const parts = [];
-  if (data.updatedAt) parts.push(`🕒 ${formatDate(data.updatedAt)}`);
-  parts.push(`📄 ${(data.text || '').length} လုံး`);
-  const views = viewCounts[starKey(cat, item)] || 0;
-  if (views > 0) parts.push(`👁️ ${views} ကြိမ်`);
-  meta.innerHTML = parts.map(p => `<span>${esc(p)}</span>`).join('');
-
-  // Update star button
-  updateStarButton();
-
-  // Track view + recent
-  bumpView(cat, item);
-  addRecent(cat, item);
-
-  if (!isAdmin) markAsSeen(cat, item);
-  if (isEditing) toggleEdit();
-
-  document.getElementById('detail-view').classList.add('active');
-  document.getElementById('detailBody').scrollTop = 0;
-  document.getElementById('readProgress').style.width = '0%';
-  updateAdminUI();
-  pushOverlayState();
-  haptic(8);
-}
-
-function formatDate(ts) {
-  const d = new Date(ts);
-  const pad = n => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
-function closeDetail() { closeDetailUI(); popOverlayState(); }
-function closeDetailUI() {
-  document.getElementById('detail-view').classList.remove('active');
-  document.getElementById('detail-view').style.transform = '';
-  document.getElementById('readProgress').style.width = '0%';
-  setTimeout(() => { currentCat = null; currentItem = null; currentDocId = null; }, 320);
-}
-
-// Reading progress
-(function initReadProgress() {
-  const body = document.getElementById('detailBody');
-  const bar = document.getElementById('readProgress');
-  if (!body || !bar) return;
-  body.addEventListener('scroll', () => {
-    const max = body.scrollHeight - body.clientHeight;
-    const pct = max > 0 ? (body.scrollTop / max) * 100 : 0;
-    bar.style.width = Math.min(100, pct) + '%';
-  }, { passive: true });
-})();
-
-// Swipe back
-(function initSwipeBack() {
-  const el = document.getElementById('detail-view');
-  let startX = 0, startY = 0, dx = 0, dragging = false, locked = null;
-  el.addEventListener('touchstart', e => {
-    if (e.touches.length !== 1) return;
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    dragging = false; locked = null; dx = 0;
-  }, { passive: true });
-  el.addEventListener('touchmove', e => {
-    if (e.touches.length !== 1) return;
-    const ddx = e.touches[0].clientX - startX;
-    const ddy = e.touches[0].clientY - startY;
-    if (locked === null) {
-      if (Math.abs(ddx) > 12 || Math.abs(ddy) > 12) locked = Math.abs(ddx) > Math.abs(ddy) ? 'x' : 'y';
-      else return;
-    }
-    if (locked !== 'x' || isEditing) return;
-    if (startX > 60 && ddx < 0) return;
-    dragging = true;
-    dx = Math.max(0, ddx);
-    el.classList.add('dragging');
-    el.style.transform = `translateX(${dx}px)`;
-  }, { passive: true });
-  el.addEventListener('touchend', () => {
-    if (!dragging) { locked = null; return; }
-    el.classList.remove('dragging');
-    if (dx > 90) { el.style.transform = ''; closeDetail(); }
-    else el.style.transform = '';
-    dragging = false; locked = null;
+  /* ============================ INIT ============================ */
+  window.addEventListener('DOMContentLoaded', () => {
+    updatePhotoToggleBtn();
   });
-})();
-
-// ══════════════════════════════════════════
-// ➕ ADD
-// ══════════════════════════════════════════
-function openAddModal() {
-  if (!isAdmin) return;
-  const select = document.getElementById('addTarget');
-  select.innerHTML = '<option value="NEW_CATEGORY">📁 Category အသစ်</option>';
-  Object.keys(appData).forEach(cat => {
-    const opt = document.createElement('option');
-    opt.value = cat;
-    opt.innerText = `📄 "${cat}" အောက်တွင် Item အသစ်`;
-    select.appendChild(opt);
-  });
-  document.getElementById('addName').value = '';
-  openModal('addModal');
-  setTimeout(() => { try { document.getElementById('addName').focus({ preventScroll: true }); } catch {} }, 320);
-}
-
-async function submitAdd(event) {
-  const target = document.getElementById('addTarget').value;
-  const name = document.getElementById('addName').value.trim();
-  if (!name) return showToast('အမည် ရိုက်ထည့်ပါ', 'error');
-  if (name.length > 60) return showToast('အမည် ရှည်လွန်းနေပါတယ်', 'error');
-  const now = Date.now();
-  if (target !== 'NEW_CATEGORY' && appData[target]?.[name]) return showToast('ဒီအမည် ရှိပြီးသား ဖြစ်နေပါတယ်', 'error');
-  if (target === 'NEW_CATEGORY' && appData[name]) return showToast('ဒီ Category ရှိပြီးသား ဖြစ်နေပါတယ်', 'error');
-
-  const btn = event?.target;
-  if (btn) btn.disabled = true;
-  try {
-    if (target === 'NEW_CATEGORY') {
-      await addDoc(collection(db, "items"), {
-        category: name, name: "First Item",
-        text: "စာသားအသစ် ရေးရန် Edit ✏️ ကို နှိပ်ပါ...",
-        img: "", addedAt: now, updatedAt: now
-      });
-      expandedCats.add(name);
-      localStorage.setItem(LS.EXPANDED, JSON.stringify([...expandedCats]));
-      showToast('Category အသစ် ထည့်ပြီးပါပြီ', 'success');
-    } else {
-      await addDoc(collection(db, "items"), {
-        category: target, name: name, text: "", img: "", addedAt: now, updatedAt: now
-      });
-      showToast('Item အသစ် ထည့်ပြီးပါပြီ', 'success');
-    }
-    closeModal('addModal');
-  } catch (e) {
-    console.error(e);
-    showToast('ထည့်သွင်းမှု မအောင်မြင်ပါ', 'error');
-  } finally {
-    if (btn) btn.disabled = false;
-  }
-}
-
-// ══════════════════════════════════════════
-// 📁 CATEGORY ACTIONS
-// ══════════════════════════════════════════
-function openCatMenu(encodedCat) {
-  if (!isAdmin) return;
-  pendingCat = decodeURIComponent(encodedCat);
-  document.getElementById('catModalTitle').innerText = '📁 ' + pendingCat;
-  openModal('catModal');
-}
-
-function catAddItem() {
-  const cat = pendingCat;
-  closeModal('catModal');
-  setTimeout(() => {
-    const select = document.getElementById('addTarget');
-    select.innerHTML = '';
-    const opt = document.createElement('option');
-    opt.value = cat;
-    opt.innerText = `📄 "${cat}" အောက်တွင် Item အသစ်`;
-    select.appendChild(opt);
-    document.getElementById('addName').value = '';
-    openModal('addModal');
-    setTimeout(() => { try { document.getElementById('addName').focus({ preventScroll: true }); } catch {} }, 320);
-  }, 240);
-}
-
-function catRename() {
-  const cat = pendingCat;
-  closeModal('catModal');
-  setTimeout(() => {
-    pendingRename = { type: 'category', oldName: cat };
-    document.getElementById('renameTitle').innerText = '✏️ Category အမည်ပြောင်းရန်';
-    document.getElementById('renameInput').value = cat;
-    openModal('renameModal');
-    setTimeout(() => { try { document.getElementById('renameInput').focus({ preventScroll: true }); } catch {} }, 320);
-  }, 240);
-}
-
-function catDelete() {
-  const cat = pendingCat;
-  closeModal('catModal');
-  setTimeout(() => {
-    document.getElementById('deleteDesc').innerHTML =
-      `<b>"${esc(cat)}"</b> Category နှင့် အတွင်းရှိ Item ${Object.keys(appData[cat] || {}).length} ခုကို ဖျက်မှာ သေချာလား?<br>ဖျက်ပြီးရင် ပြန်ယူလို့ မရနိုင်ပါ။`;
-    pendingRename = { type: 'category-delete', cat };
-    openModal('deleteModal');
-  }, 240);
-}
-
-// ══════════════════════════════════════════
-// ✏️ RENAME
-// ══════════════════════════════════════════
-async function confirmRename(event) {
-  const newName = document.getElementById('renameInput').value.trim();
-  if (!newName) return showToast('အမည် ရိုက်ထည့်ပါ', 'error');
-  if (!pendingRename) return;
-
-  const btn = event?.target;
-  if (btn) btn.disabled = true;
-
-  try {
-    if (pendingRename.type === 'item') {
-      const { cat, oldName } = pendingRename;
-      if (newName === oldName) { closeModal('renameModal'); return; }
-      if (appData[cat]?.[newName]) { showToast('ဒီအမည် ရှိပြီးသား ဖြစ်နေပါတယ်', 'error'); return; }
-      await updateDoc(doc(db, "items", appData[cat][oldName].docId), { name: newName, updatedAt: Date.now() });
-      // Move seen key
-      const oldK = starKey(cat, oldName), newK = starKey(cat, newName);
-      if (seenItems[oldK]) { seenItems[newK] = seenItems[oldK]; delete seenItems[oldK]; localStorage.setItem(LS.SEEN, JSON.stringify(seenItems)); }
-      // Move starred
-      if (starredItems.has(oldK)) { starredItems.delete(oldK); starredItems.add(newK); localStorage.setItem(LS.STARRED, JSON.stringify([...starredItems])); }
-      closeModal('renameModal');
-      document.getElementById('detailTitle').innerText = newName;
-      currentItem = newName;
-      showToast('အမည် ပြောင်းပြီးပါပြီ', 'success');
-
-    } else if (pendingRename.type === 'category') {
-      const { oldName } = pendingRename;
-      if (newName === oldName) { closeModal('renameModal'); return; }
-      if (appData[newName]) { showToast('ဒီ Category ရှိပြီးသား ဖြစ်နေပါတယ်', 'error'); return; }
-      const items = appData[oldName] || {};
-      const batch = writeBatch(db);
-      Object.values(items).forEach(it => {
-        batch.update(doc(db, "items", it.docId), { category: newName, updatedAt: Date.now() });
-      });
-      await batch.commit();
-      if (expandedCats.has(oldName)) {
-        expandedCats.delete(oldName);
-        expandedCats.add(newName);
-        localStorage.setItem(LS.EXPANDED, JSON.stringify([...expandedCats]));
-      }
-      // Move seen/starred
-      Object.keys(seenItems).forEach(k => {
-        if (k.startsWith(oldName + '::')) {
-          seenItems[newName + '::' + k.slice(oldName.length + 2)] = seenItems[k];
-          delete seenItems[k];
-        }
-      });
-      const newStarred = new Set();
-      starredItems.forEach(k => {
-        if (k.startsWith(oldName + '::')) newStarred.add(newName + '::' + k.slice(oldName.length + 2));
-        else newStarred.add(k);
-      });
-      starredItems = newStarred;
-      localStorage.setItem(LS.SEEN, JSON.stringify(seenItems));
-      localStorage.setItem(LS.STARRED, JSON.stringify([...starredItems]));
-      closeModal('renameModal');
-      showToast('Category အမည် ပြောင်းပြီးပါပြီ', 'success');
-
-    } else if (pendingRename.type === 'category-delete') {
-      const cat = pendingRename.cat;
-      const items = appData[cat] || {};
-      const batch = writeBatch(db);
-      const imgsToDelete = [];
-      Object.values(items).forEach(it => {
-        batch.delete(doc(db, "items", it.docId));
-        if (it.img && it.img.includes('firebasestorage')) imgsToDelete.push(it.img);
-      });
-      await batch.commit();
-      imgsToDelete.forEach(url => { deleteObject(ref(storage, url)).catch(() => {}); });
-      // Cleanup
-      expandedCats.delete(cat);
-      localStorage.setItem(LS.EXPANDED, JSON.stringify([...expandedCats]));
-      Object.keys(seenItems).forEach(k => { if (k.startsWith(cat + '::')) delete seenItems[k]; });
-      const newStarred = new Set();
-      starredItems.forEach(k => { if (!k.startsWith(cat + '::')) newStarred.add(k); });
-      starredItems = newStarred;
-      localStorage.setItem(LS.SEEN, JSON.stringify(seenItems));
-      localStorage.setItem(LS.STARRED, JSON.stringify([...starredItems]));
-      closeModal('deleteModal');
-      showToast('Category ဖျက်ပြီးပါပြီ', 'success');
-    }
-  } catch (e) {
-    console.error(e);
-    showToast('လုပ်ဆောင်မှု မအောင်မြင်ပါ', 'error');
-  } finally {
-    if (btn) btn.disabled = false;
-    pendingRename = null;
-  }
-}
-
-// ══════════════════════════════════════════
-// ✏️ EDIT TEXT
-// ══════════════════════════════════════════
-function toggleEdit() {
-  if (!isAdmin) return;
-  isEditing = !isEditing;
-  const textEl = document.getElementById('detailText');
-  const areaEl = document.getElementById('editTextarea');
-  const actionsEl = document.getElementById('editActions');
-  const copyBtn = document.getElementById('copyBtn');
-  const photoBtn = document.getElementById('photoBtn');
-  const editBtn = document.getElementById('editBtn');
-  const deleteBtn = document.getElementById('deleteBtn');
-  const starBtn = document.getElementById('starBtn');
-  const shareBtn = document.getElementById('shareBtn');
-
-  if (isEditing) {
-    areaEl.value = textEl.innerText === '(အကြောင်းအရာ မရှိသေးပါ)' ? '' : textEl.innerText;
-    textEl.style.display = 'none';
-    areaEl.style.display = 'block';
-    actionsEl.classList.add('show');
-    copyBtn.classList.add('hidden');
-    if (shareBtn) shareBtn.classList.add('hidden');
-    if (starBtn) starBtn.classList.add('hidden');
-    photoBtn.classList.add('hidden');
-    editBtn.classList.add('hidden');
-    deleteBtn.classList.add('hidden');
-    setTimeout(() => {
-      try {
-        areaEl.focus({ preventScroll: true });
-        areaEl.setSelectionRange(areaEl.value.length, areaEl.value.length);
-      } catch {}
-    }, 80);
-  } else {
-    textEl.style.display = 'block';
-    areaEl.style.display = 'none';
-    actionsEl.classList.remove('show');
-    copyBtn.classList.remove('hidden');
-    if (starBtn) starBtn.classList.remove('hidden');
-    updateAdminUI();
-  }
-}
-
-async function saveEdit(event) {
-  const newText = document.getElementById('editTextarea').value;
-  if (!currentDocId) return;
-  const btn = event?.target;
-  if (btn) { btn.disabled = true; btn.innerText = 'သိမ်းနေသည်...'; }
-  try {
-    await updateDoc(doc(db, "items", currentDocId), { text: newText, updatedAt: Date.now() });
-    document.getElementById('detailText').innerText = newText || '(အကြောင်းအရာ မရှိသေးပါ)';
-    const meta = document.getElementById('detailMeta');
-    const views = viewCounts[starKey(currentCat, currentItem)] || 0;
-    meta.innerHTML = `<span>🕒 ${formatDate(Date.now())}</span><span>📄 ${newText.length} လုံး</span>` +
-      (views > 0 ? `<span>👁️ ${views} ကြိမ်</span>` : '');
-    toggleEdit();
-    showToast('သိမ်းဆည်းပြီးပါပြီ', 'success');
-  } catch (e) {
-    console.error(e);
-    showToast('သိမ်းဆည်းမှု မအောင်မြင်ပါ', 'error');
-  } finally {
-    if (btn) { btn.disabled = false; btn.innerText = '💾 သိမ်းမယ်'; }
-  }
-}
-
-// ══════════════════════════════════════════
-// 🗑️ DELETE ITEM
-// ══════════════════════════════════════════
-function openDeleteModal() {
-  if (!isAdmin || !currentDocId) return;
-  pendingRename = { type: 'item-delete' };
-  document.getElementById('deleteDesc').innerHTML =
-    `<b>"${esc(currentItem)}"</b> ကို ဖျက်မှာ သေချာလား?<br>ဖျက်ပြီးရင် ပြန်ယူလို့ မရနိုင်ပါ။`;
-  openModal('deleteModal');
-}
-
-async function confirmDelete(event) {
-  if (pendingRename?.type === 'item-delete') {
-    if (!currentDocId) return;
-    const btn = event?.target;
-    if (btn) btn.disabled = true;
-    const capturedCat = currentCat, capturedItem = currentItem;
-    try {
-      const data = appData[capturedCat]?.[capturedItem];
-      if (data?.img && data.img.includes('firebasestorage')) {
-        deleteObject(ref(storage, data.img)).catch(() => {});
-      }
-      await deleteDoc(doc(db, "items", currentDocId));
-      // Cleanup local
-      const k = starKey(capturedCat, capturedItem);
-      starredItems.delete(k);
-      seenItems[k] = undefined;
-      delete seenItems[k];
-      recentItems = recentItems.filter(r => r !== k);
-      delete viewCounts[k];
-      localStorage.setItem(LS.STARRED, JSON.stringify([...starredItems]));
-      localStorage.setItem(LS.SEEN, JSON.stringify(seenItems));
-      localStorage.setItem(LS.RECENT, JSON.stringify(recentItems));
-      localStorage.setItem(LS.VIEWS, JSON.stringify(viewCounts));
-      closeModal('deleteModal');
-      closeDetail();
-      haptic([20, 30, 20]);
-      showToast('ဖျက်ပြီးပါပြီ', 'success');
-    } catch (e) {
-      console.error(e);
-      showToast('ဖျက်မှု မအောင်မြင်ပါ', 'error');
-    } finally {
-      if (btn) btn.disabled = false;
-      pendingRename = null;
-    }
-    return;
-  }
-  confirmRename(event);
-}
-
-// ══════════════════════════════════════════
-// 📷 PHOTO UPLOAD
-// ══════════════════════════════════════════
-function triggerPhotoUpload() {
-  if (!isAdmin) return showToast('Admin သာ လုပ်နိုင်ပါသည်', 'error');
-  if (!currentDocId) return showToast('Item မရွေးထားပါ', 'error');
-  const input = document.getElementById('photoInput');
-  if (!input) return;
-  haptic(10);
-  input.click();
-}
-
-async function uploadImg(event) {
-  if (!isAdmin || !currentDocId) return;
-  const input = event.target;
-  const file = input.files && input.files[0];
-  try { input.value = ''; } catch {}
-  if (!file) return;
-  if (!file.type || !file.type.startsWith('image/')) return showToast('ပုံဖိုင် သာ ရွေးပါ (JPG, PNG, WebP...)', 'error');
-  if (file.size === 0) return showToast('ပုံဖိုင် ပျက်နေပါသည်', 'error');
-  if (file.size > 3 * 1024 * 1024) return showToast('ပုံအရွယ်အစား 3MB အောက် ဖြစ်ရမည်', 'error');
-
-  let localPreviewUrl = '';
-  try {
-    localPreviewUrl = URL.createObjectURL(file);
-    const imgEl = document.getElementById('detailImg');
-    imgEl.classList.remove('img-error', 'loading');
-    imgEl.src = localPreviewUrl;
-    imgEl.alt = '';
-    imgEl.style.display = 'block';
-  } catch (e) { console.warn('Preview failed:', e); }
-
-  const progressEl = document.getElementById('uploadProgress');
-  const progressText = document.getElementById('uploadProgressText');
-  if (progressEl) { progressEl.classList.add('show'); if (progressText) progressText.innerText = 'ပုံတင်နေသည်...'; }
-
-  const capturedCat = currentCat, capturedItem = currentItem, capturedDocId = currentDocId;
-
-  try {
-    let ext = 'jpg';
-    const nameExt = (file.name || '').split('.').pop();
-    if (nameExt && nameExt.length <= 5) ext = nameExt.toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
-    else if (file.type === 'image/png') ext = 'png';
-    else if (file.type === 'image/webp') ext = 'webp';
-    else if (file.type === 'image/gif') ext = 'gif';
-
-    const fileName = `images/${Date.now()}_${Math.random().toString(36).slice(2,10)}.${ext}`;
-    const storageRef = ref(storage, fileName);
-    if (progressText) progressText.innerText = 'တင်နေသည်...';
-    const snapshot = await uploadBytes(storageRef, file, {
-      contentType: file.type || 'image/jpeg',
-      cacheControl: 'public,max-age=31536000'
-    });
-    if (progressText) progressText.innerText = 'URL ယူနေသည်...';
-    const downloadURL = await getDownloadURL(snapshot.ref);
-    if (progressText) progressText.innerText = 'သိမ်းနေသည်...';
-    await updateDoc(doc(db, "items", capturedDocId), { img: downloadURL, updatedAt: Date.now() });
-
-    const imgEl = document.getElementById('detailImg');
-    if (imgEl && currentCat === capturedCat && currentItem === capturedItem) {
-      const bustUrl = downloadURL + (downloadURL.includes('?') ? '&' : '?') + '_t=' + Date.now();
-      imgEl.onload = () => { imgEl.classList.remove('loading'); if (localPreviewUrl) URL.revokeObjectURL(localPreviewUrl); };
-      imgEl.onerror = () => imgEl.classList.add('img-error');
-      imgEl.src = bustUrl;
-      imgEl.style.display = 'block';
-    }
-
-    const oldImg = appData[capturedCat]?.[capturedItem]?.img;
-    if (oldImg && oldImg.includes('firebasestorage') && oldImg !== downloadURL) {
-      deleteObject(ref(storage, oldImg)).catch(err => console.warn("Old img delete:", err));
-    }
-
-    haptic(30);
-    showToast('✅ ပုံတင်ပြီးပါပြီ', 'success');
-  } catch (e) {
-    console.error('Upload error:', e);
-    const imgEl = document.getElementById('detailImg');
-    const oldImg = appData[capturedCat]?.[capturedItem]?.img;
-    if (imgEl && currentCat === capturedCat && currentItem === capturedItem) {
-      if (oldImg) setDetailImage(oldImg);
-      else { imgEl.removeAttribute('src'); imgEl.style.display = 'none'; }
-    }
-    if (localPreviewUrl) URL.revokeObjectURL(localPreviewUrl);
-    let msg = 'ပုံတင်မှု မအောင်မြင်ပါ';
-    if (e.code === 'storage/unauthorized') msg = '⚠️ Storage Rules ခွင့်မပြုပါ';
-    else if (e.code === 'storage/retry-limit-exceeded') msg = '⚠️ Network ပြဿနာ';
-    else if (e.code === 'storage/unknown') msg = '⚠️ Storage Error';
-    else if (e.code === 'permission-denied') msg = '⚠️ Firestore ခွင့်မပြုပါ';
-    showToast(msg, 'error');
-    haptic([40, 40, 40]);
-  } finally {
-    if (progressEl) progressEl.classList.remove('show');
-  }
-}
-
-// ══════════════════════════════════════════
-// 🖼️ LIGHTBOX
-// ══════════════════════════════════════════
-function openLightbox(src) {
-  if (!src || src.startsWith('data:image/svg')) return;
-  document.getElementById('lightboxImg').src = src;
-  document.getElementById('lightbox').classList.add('show');
-}
-function closeLightbox() { document.getElementById('lightbox').classList.remove('show'); }
-
-// ══════════════════════════════════════════
-// ⚙️ UTILITIES
-// ══════════════════════════════════════════
-function onSearch() {
-  searchTerm = document.getElementById('search').value;
-  document.getElementById('searchClear').classList.toggle('show', !!searchTerm);
-  renderList();
-}
-function clearSearch() {
-  document.getElementById('search').value = '';
-  searchTerm = '';
-  document.getElementById('searchClear').classList.remove('show');
-  renderList();
-}
-
-async function copyText() {
-  const text = document.getElementById('detailText').innerText;
-  try {
-    await navigator.clipboard.writeText(text);
-    showToast('ကူးယူပြီးပါပြီ', 'success');
-  } catch {
-    const temp = document.createElement('textarea');
-    temp.value = text;
-    temp.style.position = 'fixed';
-    temp.style.opacity = '0';
-    document.body.appendChild(temp);
-    temp.select();
-    try { document.execCommand('copy'); showToast('ကူးယူပြီးပါပြီ', 'success'); }
-    catch { showToast('ကူးယူမှု မအောင်မြင်ပါ', 'error'); }
-    document.body.removeChild(temp);
-  }
-  haptic(15);
-}
-
-async function shareText() {
-  const title = currentItem || 'Basic App';
-  const text = document.getElementById('detailText').innerText;
-  if (navigator.share) { try { await navigator.share({ title, text }); } catch {} }
-  else copyText();
-}
-
-function openModal(id) {
-  const el = document.getElementById(id);
-  if (!el || el.classList.contains('show')) return;
-  el.classList.add('show');
-  pushOverlayState();
-}
-function closeModal(id) {
-  const el = document.getElementById(id);
-  if (!el || !el.classList.contains('show')) return;
-  el.classList.remove('show');
-  popOverlayState();
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    const modals = document.querySelectorAll('.modal-overlay.show');
-    if (modals.length) { closeModal(modals[modals.length - 1].id); return; }
-    if (document.getElementById('detail-view').classList.contains('active')) closeDetail();
-  }
-  if (e.key === 'Enter' && !e.shiftKey) {
-    const id = document.activeElement?.id;
-    if (id === 'pinInput') loginAdmin();
-    if (id === 'newPinInput') saveNewPin();
-    if (id === 'addName') submitAdd();
-    if (id === 'renameInput') confirmRename();
-    if (id === 'adLink') saveAd();
-  }
-});
-
-// ══════════════════════════════════════════
-// 📱 PWA — Dynamic manifest + install
-// ══════════════════════════════════════════
-(function setupPWA() {
-  try {
-    const manifest = {
-      name: 'Basic App Pro',
-      short_name: 'BasicApp',
-      start_url: '.',
-      display: 'standalone',
-      background_color: '#ffc107',
-      theme_color: '#ffc107',
-      icons: [{
-        src: 'data:image/svg+xml,' + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><rect width="192" height="192" fill="#ffc107" rx="32"/><text x="96" y="130" font-size="100" text-anchor="middle" font-family="sans-serif">📱</text></svg>'
-        ),
-        sizes: '192x192',
-        type: 'image/svg+xml'
-      }]
-    };
-    const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('link');
-    link.rel = 'manifest';
-    link.href = url;
-    document.head.appendChild(link);
-  } catch (e) { console.warn('PWA manifest setup:', e); }
-})();
-
-// ══════════════════════════════════════════
-// 🚀 START
-// ══════════════════════════════════════════
-(function init() {
-  applyThemeMode();
-  applyFontSize();
-  updateAdminUI();
-  updateStatus();
-  listenToItems();
-  listenToAds();
-  loadPinConfig();
-})();
-
-// Global bindings
-Object.assign(window, {
-  toggleTheme, openSettings, toggleAdminModal, openPinModal, clearSeenItems,
-  closeModal, loginAdmin, saveNewPin, resetFontSize, logoutAdmin,
-  openAddModal, submitAdd, openDetail, closeDetail, toggleEdit, saveEdit,
-  openDeleteModal, confirmDelete, uploadImg, triggerPhotoUpload,
-  copyText, shareText, changeFontSize, onSearch, clearSearch,
-  toggleCat, openCatMenu, catAddItem, catRename, catDelete,
-  confirmRename, openRenameItem: () => {},
-  openAdManager, openAdForm, saveAd, deleteAd, toggleAdActive,
-  uploadAdImg, removeAdImg, openAdById,
-  openLightbox, closeLightbox,
-  startVoiceSearch, stopVoiceSearch,
-  toggleStarCurrent, setQuickFilter,
-  setThemeMode, openThemeModeModal,
-  exportData, clearAllData
-});
 </script>
+
 </body>
 </html>
