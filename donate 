@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ဖိတ်ကြားလွှာ - Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Pyidaungsu', 'Myanmar Text', sans-serif;
+    overflow-x: hidden;
+    background: #1a0f08;
+  }
+
+  /* ============================ ၁။ LANDING PAGE ============================ */
+  #landing {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #3d2817 0%, #1a0f08 70%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+  #landing.fade-out { opacity: 0; visibility: hidden; }
+
+  #landing::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(218,165,32,0.5), transparent),
+      radial-gradient(2px 2px at 60% 70%, rgba(218,165,32,0.4), transparent),
+      radial-gradient(1px 1px at 50% 50%, rgba(218,165,32,0.6), transparent),
+      radial-gradient(1px 1px at 80% 20%, rgba(218,165,32,0.3), transparent),
+      radial-gradient(2px 2px at 30% 80%, rgba(218,165,32,0.4), transparent);
+    animation: sparkle 4s ease-in-out infinite alternate;
+  }
+  @keyframes sparkle { 0% { opacity: 0.4; } 100% { opacity: 1; } }
+
+  .landing-content {
+    text-align: center;
+    color: #fdf6e3;
+    padding: 40px;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1.2s ease-out;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .landing-seal {
+    width: 130px; height: 130px;
+    border: 2px solid #daa520;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 30px;
+    font-size: 55px; color: #daa520;
+    background: radial-gradient(circle, rgba(218,165,32,0.15), transparent);
+    box-shadow: 0 0 40px rgba(218,165,32,0.3), inset 0 0 30px rgba(218,165,32,0.2);
+    position: relative;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(218,165,32,0.3), inset 0 0 30px rgba(218,165,32,0.2); }
+    50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(218,165,32,0.5), inset 0 0 40px rgba(218,165,32,0.3); }
+  }
+  .landing-seal::before {
+    content: '';
+    position: absolute; inset: 8px;
+    border: 1px dashed #daa520;
+    border-radius: 50%;
+    animation: rotate 20s linear infinite;
+  }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+
+  .landing-content h1 {
+    font-size: 38px; color: #fdf6e3; letter-spacing: 3px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px rgba(218,165,32,0.5);
+  }
+  .landing-content .eng-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 18px; color: #daa520;
+    letter-spacing: 8px; text-transform: uppercase; margin-bottom: 45px;
+  }
+
+  .enter-btn {
+    padding: 18px 50px;
+    font-size: 18px;
+    font-family: 'Pyidaungsu', sans-serif;
+    color: #1a0f08;
+    background: linear-gradient(135deg, #daa520, #f4d47a, #daa520);
+    border: none; border-radius: 50px;
+    cursor: pointer; font-weight: bold; letter-spacing: 2px;
+    box-shadow: 0 10px 30px rgba(218,165,32,0.4), 0 0 0 0 rgba(218,165,32,0.7);
+    transition: all 0.3s ease;
+    animation: btnPulse 2s infinite;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  @keyframes btnPulse {
+    0% { box-shadow: 0 10px 30px rgba(218,165,32,0.4), 0 0 0 0 rgba(218,165,32,0.6); }
+    70% { box-shadow: 0 10px 30px rgba(218,165,32,0.4), 0 0 0 20px rgba(218,165,32,0); }
+    100% { box-shadow: 0 10px 30px rgba(218,165,32,0.4), 0 0 0 0 rgba(218,165,32,0); }
+  }
+  .enter-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 40px rgba(218,165,32,0.6); }
+  .enter-btn .arrow { font-size: 22px; transition: transform 0.3s; }
+  .enter-btn:hover .arrow { transform: translateX(6px); }
+
+  .landing-hint {
+    margin-top: 25px; font-size: 13px; color: #daa520;
+    opacity: 0.6; letter-spacing: 2px; font-style: italic;
+  }
+
+  /* ============================ ၂။ BOOK VIEW ============================ */
+  #bookView {
+    min-height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+    background: radial-gradient(circle at center, #3d2817 0%, #1a0f08 100%);
+    perspective: 2000px;
+  }
+  #bookView.active { display: flex; }
+
+  .book {
+    display: flex;
+    width: 100%; max-width: 1050px;
+    background: #fdf6e3;
+    border-radius: 8px;
+    box-shadow:
+      0 30px 60px rgba(0,0,0,0.7),
+      0 0 80px rgba(218, 165, 32, 0.15),
+      inset 0 0 100px rgba(139, 69, 19, 0.08);
+    position: relative;
+    transform-style: preserve-3d;
+    animation: bookAppear 1s ease-out;
+  }
+  @keyframes bookAppear {
+    from { opacity: 0; transform: rotateX(20deg) scale(0.9); }
+    to { opacity: 1; transform: rotateX(0) scale(1); }
+  }
+
+  .book::before {
+    content: '';
+    position: absolute; left: -18px; top: 0; bottom: 0; width: 18px;
+    background: linear-gradient(90deg, #4a2c17, #8b4513 50%, #5c3418);
+    border-radius: 8px 0 0 8px;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+  }
+  .book::after {
+    content: '';
+    position: absolute; right: -18px; top: 0; bottom: 0; width: 18px;
+    background: linear-gradient(90deg, #5c3418, #8b4513 50%, #4a2c17);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+  }
+
+  .page {
+    flex: 1;
+    padding: 50px 45px;
+    position: relative;
+    background: linear-gradient(to right, #fdf6e3 0%, #f5ebd0 100%);
+    min-height: 620px;
+  }
+  .page.left {
+    border-radius: 8px 0 0 8px;
+    background: linear-gradient(to right, rgba(139,69,19,0.08) 0%, transparent 5%, transparent 95%, rgba(139,69,19,0.15) 100%), #fdf6e3;
+  }
+  .page.right {
+    border-radius: 0 8px 8px 0;
+    background: linear-gradient(to left, rgba(139,69,19,0.08) 0%, transparent 5%, transparent 95%, rgba(139,69,19,0.15) 100%), #fdf6e3;
+  }
+
+  .spine {
+    width: 30px;
+    background: linear-gradient(90deg, #5c3418 0%, #8b4513 20%, #3d2817 50%, #8b4513 80%, #5c3418 100%);
+    position: relative; z-index: 2;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.4);
+  }
+  .spine::before {
+    content: '';
+    position: absolute; top: 10%; bottom: 10%; left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, #daa520 20%, #daa520 80%, transparent);
+    opacity: 0.6;
+  }
+
+  .frame {
+    border: 2px solid #daa520;
+    padding: 25px;
+    height: 100%;
+    position: relative;
+    background-image:
+      radial-gradient(circle at 0% 0%, rgba(218,165,32,0.1) 0%, transparent 30%),
+      radial-gradient(circle at 100% 0%, rgba(218,165,32,0.1) 0%, transparent 30%),
+      radial-gradient(circle at 0% 100%, rgba(218,165,32,0.1) 0%, transparent 30%),
+      radial-gradient(circle at 100% 100%, rgba(218,165,32,0.1) 0%, transparent 30%);
+    min-height: 540px;
+    display: flex;
+    flex-direction: column;
+  }
+  .frame::before {
+    content: '';
+    position: absolute; inset: 6px;
+    border: 1px solid #c9a961;
+    pointer-events: none;
+  }
+  .frame::after {
+    content: '❦';
+    position: absolute; top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: #fdf6e3;
+    padding: 0 10px;
+    color: #8b4513; font-size: 20px;
+  }
+
+  /* ဘယ်ဘက် content */
+  .left-content {
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+  }
+  .top-ornament { color: #daa520; font-size: 28px; letter-spacing: 8px; }
+  .invitation-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 16px; color: #8b4513;
+    letter-spacing: 6px; text-transform: uppercase; opacity: 0.8;
+  }
+  .title {
+    font-size: 30px; font-weight: 700; color: #4a1d1d;
+    line-height: 1.7; letter-spacing: 1px;
+    text-shadow: 1px 1px 0 rgba(218,165,32,0.3);
+    margin: 15px 0;
+  }
+  .title .accent { color: #8b4513; display: block; font-size: 24px; margin-top: 5px; }
+  .ornament {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; color: #daa520; margin: 15px 0;
+  }
+  .ornament::before, .ornament::after {
+    content: '';
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, #daa520, transparent);
+  }
+  .ornament-icon { font-size: 20px; color: #8b4513; }
+  .sub-info { font-size: 15px; color: #5c3418; line-height: 2; font-style: italic; }
+  .seal {
+    width: 90px; height: 90px;
+    border: 2px solid #8b4513;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #8b4513; font-size: 13px; text-align: center; line-height: 1.4;
+    background: radial-gradient(circle, #fdf6e3, #f0e0c0);
+    box-shadow: inset 0 0 10px rgba(139,69,19,0.2), 0 3px 8px rgba(0,0,0,0.1);
+    margin-top: 15px; font-weight: bold;
+    position: relative; padding: 5px;
+  }
+  .seal::before {
+    content: '';
+    position: absolute; inset: 5px;
+    border: 1px dashed #8b4513;
+    border-radius: 50%;
+  }
+
+  /* ညာဘက် content */
+  .right-content { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .letter-salutation {
+    font-size: 16px; color: #4a1d1d; font-weight: bold;
+    margin-bottom: 15px; text-align: center; font-style: italic;
+  }
+  .letter-body {
+    font-size: 15px; line-height: 2.1; color: #2c1810;
+    text-align: justify; text-justify: inter-word;
+    margin-bottom: 20px; text-indent: 25px;
+  }
+  .letter-body .highlight {
+    color: #8b4513; font-weight: bold;
+    background: linear-gradient(180deg, transparent 60%, rgba(218,165,32,0.3) 60%);
+    padding: 0 2px;
+  }
+
+  .details {
+    margin-top: 15px;
+    padding: 18px 20px;
+    border-top: 1px solid #daa520;
+    border-bottom: 1px solid #daa520;
+    background: linear-gradient(135deg, rgba(218,165,32,0.05), rgba(139,69,19,0.03));
+    position: relative;
+  }
+  .details::before, .details::after {
+    content: '❦';
+    position: absolute; left: 50%;
+    transform: translateX(-50%);
+    background: #fdf6e3;
+    padding: 0 10px;
+    color: #8b4513; font-size: 14px;
+  }
+  .details::before { top: -10px; }
+  .details::after { bottom: -10px; }
+
+  .detail-row {
+    display: flex; font-size: 14.5px; line-height: 1.9;
+    color: #2c1810; margin: 6px 0;
+  }
+  .detail-row .label {
+    width: 115px; font-weight: bold; color: #8b4513; flex-shrink: 0;
+  }
+  .detail-row .label::after { content: ' :'; }
+  .detail-row .value { flex: 1; }
+
+  .signature {
+    text-align: right; margin-top: 20px;
+    font-size: 14px; color: #5c3418; line-height: 1.8;
+  }
+  .signature .sign-line {
+    display: inline-block;
+    border-top: 1px solid #8b4513;
+    padding-top: 5px; margin-top: 25px;
+    font-style: italic; color: #8b4513;
+  }
+
+  /* ============================ EDIT MODE STYLE ============================ */
+  [contenteditable="true"] {
+    outline: 2px dashed rgba(218,165,32,0.6);
+    outline-offset: 4px;
+    border-radius: 3px;
+    cursor: text;
+    transition: outline 0.2s;
+    min-width: 20px;
+  }
+  [contenteditable="true"]:focus {
+    outline: 2px solid #daa520;
+    background: rgba(255, 250, 235, 0.9);
+    box-shadow: 0 0 20px rgba(218,165,32,0.4);
+  }
+  [contenteditable="true"]:hover { background: rgba(218,165,32,0.08); }
+
+  .edit-indicator {
+    position: fixed; top: 20px; left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #daa520, #f4d47a);
+    color: #1a0f08;
+    padding: 10px 30px;
+    border-radius: 50px;
+    font-weight: bold; font-size: 14px; letter-spacing: 1px;
+    box-shadow: 0 8px 25px rgba(218,165,32,0.5);
+    z-index: 5000; display: none;
+    animation: slideDown 0.4s ease-out;
+  }
+  .edit-indicator.active { display: block; }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translate(-50%, -20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
+
+  /* ============================ ADMIN FLOATING BTN ============================ */
+  .admin-toggle {
+    position: fixed; bottom: 30px; right: 30px;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8b4513, #5c3418);
+    color: #daa520;
+    border: 2px solid #daa520;
+    font-size: 26px; cursor: pointer;
+    z-index: 4000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5), 0 0 20px rgba(218,165,32,0.3);
+    transition: all 0.3s;
+    display: none; align-items: center; justify-content: center;
+  }
+  .admin-toggle.visible { display: flex; }
+  .admin-toggle:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.6), 0 0 30px rgba(218,165,32,0.5);
+  }
+
+  /* ============================ ADMIN PANEL ============================ */
+  .admin-panel {
+    position: fixed; top: 0; right: -420px;
+    width: 380px; max-width: 90vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #2c1810, #1a0f08);
+    border-left: 3px solid #daa520;
+    box-shadow: -10px 0 40px rgba(0,0,0,0.7);
+    z-index: 4500;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    padding: 25px;
+  }
+  .admin-panel.open { right: 0; }
+
+  .admin-panel h2 {
+    color: #daa520; font-size: 22px;
+    margin-bottom: 25px; padding-bottom: 15px;
+    border-bottom: 2px solid rgba(218,165,32,0.3);
+    letter-spacing: 2px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .close-panel {
+    background: none; border: 1px solid #daa520; color: #daa520;
+    width: 32px; height: 32px; border-radius: 50%;
+    cursor: pointer; font-size: 18px; transition: all 0.3s;
+  }
+  .close-panel:hover { background: #daa520; color: #1a0f08; transform: rotate(90deg); }
+
+  .admin-section {
+    margin-bottom: 25px; padding: 18px;
+    background: rgba(218,165,32,0.05);
+    border: 1px solid rgba(218,165,32,0.2);
+    border-radius: 10px;
+  }
+  .admin-section h3 {
+    color: #f4d47a; font-size: 14px;
+    margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  .admin-btn {
+    width: 100%; padding: 12px 18px; margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #daa520;
+    background: transparent; color: #daa520;
+    font-family: 'Pyidaungsu', sans-serif; font-size: 14px;
+    cursor: pointer; transition: all 0.3s;
+    display: flex; align-items: center; gap: 10px;
+    justify-content: flex-start; letter-spacing: 0.5px;
+  }
+  .admin-btn:last-child { margin-bottom: 0; }
+  .admin-btn:hover { background: #daa520; color: #1a0f08; transform: translateX(5px); }
+  .admin-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .admin-btn:disabled:hover { background: transparent; color: #daa520; }
+  .admin-btn.primary {
+    background: linear-gradient(135deg, #daa520, #f4d47a);
+    color: #1a0f08; font-weight: bold;
+  }
+  .admin-btn.primary:hover { box-shadow: 0 0 25px rgba(218,165,32,0.6); }
+  .admin-btn.danger { border-color: #e74c3c; color: #e74c3c; }
+  .admin-btn.danger:hover { background: #e74c3c; color: #fff; }
+  .admin-btn.active { background: #2ecc71; border-color: #2ecc71; color: #fff; }
+
+  .status-msg {
+    margin-top: 12px; padding: 10px;
+    border-radius: 6px; font-size: 13px;
+    text-align: center; display: none;
+  }
+  .status-msg.success {
+    display: block;
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+  }
+  .status-msg.error {
+    display: block;
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+  }
+
+  /* ============================ LOGIN MODAL ============================ */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    display: none; justify-content: center; align-items: center;
+    z-index: 6000; padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .login-modal {
+    background: linear-gradient(135deg, #2c1810, #1a0f08);
+    border: 2px solid #daa520;
+    border-radius: 20px;
+    padding: 40px 35px;
+    width: 100%; max-width: 400px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(218,165,32,0.3);
+    animation: modalPop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  @keyframes modalPop {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .login-modal h2 {
+    color: #daa520; text-align: center;
+    font-size: 22px; margin-bottom: 10px; letter-spacing: 2px;
+  }
+  .login-modal p {
+    color: #daa520; text-align: center;
+    font-size: 13px; opacity: 0.6; margin-bottom: 25px; letter-spacing: 1px;
+  }
+  .lock-icon {
+    text-align: center; font-size: 50px; color: #daa520;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 20px rgba(218,165,32,0.5));
+  }
+
+  .password-input {
+    width: 100%; padding: 14px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(218,165,32,0.4);
+    background: rgba(0,0,0,0.4);
+    color: #f4d47a;
+    font-family: 'Pyidaungsu', sans-serif;
+    font-size: 15px; letter-spacing: 2px;
+    outline: none; transition: all 0.3s; margin-bottom: 15px;
+  }
+  .password-input:focus {
+    border-color: #daa520;
+    box-shadow: 0 0 20px rgba(218,165,32,0.4);
+  }
+  .password-input::placeholder { color: rgba(218,165,32,0.3); letter-spacing: 1px; }
+
+  .login-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #daa520, #f4d47a);
+    color: #1a0f08; border: none; border-radius: 10px;
+    font-family: 'Pyidaungsu', sans-serif;
+    font-size: 16px; font-weight: bold; letter-spacing: 2px;
+    cursor: pointer; transition: all 0.3s; margin-bottom: 10px;
+  }
+  .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(218,165,32,0.5); }
+
+  .cancel-btn {
+    width: 100%; padding: 12px;
+    background: transparent; color: #888;
+    border: 1px solid #444; border-radius: 10px;
+    font-family: 'Pyidaungsu', sans-serif;
+    font-size: 14px; cursor: pointer; transition: all 0.3s;
+  }
+  .cancel-btn:hover { color: #daa520; border-color: #daa520; }
+
+  .login-error {
+    color: #e74c3c; text-align: center; font-size: 13px;
+    margin-bottom: 10px; display: none; padding: 8px;
+    background: rgba(231, 76, 60, 0.1); border-radius: 6px;
+  }
+  .login-error.show { display: block; }
+
+  /* ============================ RESPONSIVE ============================ */
+  @media (max-width: 768px) {
+    .book { flex-direction: column; max-width: 500px; }
+    .book::before, .book::after { display: none; }
+    .page { border-radius: 8px !important; padding: 30px 22px; min-height: auto; }
+    .frame { min-height: auto; padding: 20px 15px; }
+    .spine {
+      width: 100%; height: 20px;
+      background: linear-gradient(180deg, #5c3418 0%, #8b4513 20%, #3d2817 50%, #8b4513 80%, #5c3418 100%);
+    }
+    .spine::before {
+      top: 50%; left: 10%; right: 10%;
+      bottom: auto; width: auto; height: 2px;
+      transform: translateY(-50%);
+      background: linear-gradient(to right, transparent, #daa520 20%, #daa520 80%, transparent);
+    }
+    .title { font-size: 22px; }
+    .title .accent { font-size: 18px; }
+    .letter-body { font-size: 14px; line-height: 2; }
+    .detail-row { flex-direction: column; gap: 2px; }
+    .detail-row .label { width: auto; }
+    .landing-content h1 { font-size: 26px; }
+    .landing-content .eng-title { font-size: 14px; letter-spacing: 5px; }
+    .landing-seal { width: 100px; height: 100px; font-size: 40px; }
+    .enter-btn { padding: 15px 35px; font-size: 16px; }
+    .admin-panel { width: 100%; right: -100%; }
+    .admin-toggle { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 22px; }
+  }
+
+  /* ==================== PRO EDITOR / TOOLBAR ==================== */
+  :root{
+    --pro-gold:#c9a227;
+    --pro-gold2:#f1d98a;
+    --pro-burgundy:#5a2028;
+    --pro-ink:#2c1810;
+  }
+  .editor-toolbar{
+    display:none;
+    position:sticky; top:0; z-index:20;
+    margin:-25px -25px 18px;
+    padding:12px;
+    background:rgba(28,15,8,.96);
+    border-bottom:1px solid rgba(218,165,32,.35);
+    backdrop-filter:blur(12px);
+  }
+  .editor-toolbar.show{display:block}
+  .editor-toolbar .toolbar-title{color:#f4d47a;font-weight:700;font-size:13px;margin-bottom:9px}
+  .toolbar-row{display:flex;flex-wrap:wrap;gap:7px}
+  .tool-btn,.tool-select{
+    border:1px solid rgba(218,165,32,.45);
+    background:rgba(255,255,255,.04);
+    color:#f7e8bd;
+    border-radius:7px;
+    min-height:36px;
+    padding:7px 10px;
+    font-family:'Pyidaungsu',sans-serif;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .tool-btn:hover,.tool-select:focus{background:#daa520;color:#1a0f08;outline:none}
+  .tool-btn.active{background:#daa520;color:#1a0f08}
+  .tool-select option{background:#2c1810;color:#fff}
+  .selected-editable{ outline:2px solid #daa520 !important; outline-offset:5px; }
+
+  /* ==========================================================
+     🖼️ ဓာတ်ပုံ Frame  —  DEFAULT: လုံးဝ ဖျောက်ထား (Hidden)
+     ========================================================== */
+  .photo-frame{
+    display: none;                 /* ← အစပိုင်းတွင် လုံးဝ မမြင်ရ */
+    width: 240px;
+    max-width: 100%;
+    margin: 4px auto 2px;
+    padding: 9px;
+    position: relative;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #fffdf7, #f3e7cc);
+    border: 1px solid rgba(139,69,19,.28);
+    box-shadow:
+      0 14px 28px rgba(74,29,29,.16),
+      0 2px 0 rgba(255,255,255,.85) inset,
+      0 0 0 1px rgba(218,165,32,.22);
+  }
+  .photo-frame.visible{
+    display: block;
+    animation: photoIn .55s cubic-bezier(.22,1,.36,1);
+  }
+  @keyframes photoIn{
+    from{ opacity:0; transform: translateY(10px) scale(.96); }
+    to  { opacity:1; transform: none; }
+  }
+  .photo-frame::before{
+    content:'';
+    position:absolute; inset:4px;
+    border:1px solid rgba(201,162,39,.6);
+    border-radius:3px;
+    pointer-events:none;
+  }
+  .photo-inner{
+    position:relative;
+    width:100%;
+    aspect-ratio: 4 / 3;
+    overflow:hidden;
+    border-radius:3px;
+    background:#efe3c8;
+    box-shadow: 0 0 0 1px rgba(139,69,19,.22) inset;
+  }
+  .photo-inner img{
+    width:100%; height:100%;
+    object-fit: cover;
+    display:block;
+    transition: transform .7s cubic-bezier(.22,1,.36,1);
+  }
+  .photo-frame:hover .photo-inner img{ transform: scale(1.035); }
+  .photo-caption{
+    margin-top:9px;
+    font-size:11px;
+    letter-spacing:.8px;
+    text-align:center;
+    color:#8b4513;
+    font-style:italic;
+    opacity:.85;
+    line-height:1.6;
+  }
+
+  /* ဓာတ်ပုံ ခလုတ်ငယ်များ */
+  .image-actions{
+    display:none;
+    gap:7px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin:10px 0 2px;
+  }
+  .image-actions.show{ display:flex; }
+  .mini-btn{
+    border:1px solid #c9a961;
+    background:#fffaf0;
+    color:#5c3418;
+    border-radius:7px;
+    padding:6px 11px;
+    font-family:'Pyidaungsu',sans-serif;
+    cursor:pointer;
+    font-size:12px;
+    transition:all .2s;
+  }
+  .mini-btn:hover{ background:#daa520; color:#1a0f08; transform:translateY(-1px); }
+
+  .admin-image-preview{
+    width:100%; max-height:180px; object-fit:contain;
+    background:#120a06;
+    border:1px solid rgba(218,165,32,.25);
+    border-radius:8px; margin-top:10px; display:none;
+  }
+  .image-size-row{
+    display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:9px;
+  }
+  .image-size-row input,
+  .image-size-row select{
+    width:100%; padding:9px; border-radius:7px;
+    border:1px solid rgba(218,165,32,.35);
+    background:rgba(0,0,0,.25);
+    color:#f4d47a;
+    font-family:'Pyidaungsu',sans-serif;
+    font-size:12px;
+  }
+  .image-size-row select option{ background:#2c1810; color:#fff; }
+
+  /* ============================ TOAST ============================ */
+  .toast-wrap{
+    position:fixed; top:22px; left:50%;
+    transform:translateX(-50%);
+    z-index:8000;
+    display:flex; flex-direction:column;
+    gap:8px; align-items:center;
+    pointer-events:none;
+    width:max-content; max-width:92vw;
+  }
+  .toast{
+    padding:11px 24px;
+    border-radius:50px;
+    font-size:13.5px;
+    font-weight:700;
+    letter-spacing:.4px;
+    background:linear-gradient(135deg,#daa520,#f4d47a);
+    color:#1a0f08;
+    box-shadow:0 12px 34px rgba(0,0,0,.5);
+    animation: toastIn .35s cubic-bezier(.22,1,.36,1);
+    text-align:center;
+  }
+  .toast.success{ background:linear-gradient(135deg,#2ecc71,#8ce8b0); color:#0d2b1a; }
+  .toast.error{ background:linear-gradient(135deg,#e74c3c,#ff9a8c); color:#fff; }
+  .toast.out{ animation: toastOut .3s ease-in forwards; }
+  @keyframes toastIn{ from{ opacity:0; transform:translateY(-16px) scale(.94);} to{ opacity:1; transform:none;} }
+  @keyframes toastOut{ to{ opacity:0; transform:translateY(-16px) scale(.94);} }
+
+  @media (max-width:768px){
+    .editor-toolbar{ margin:-20px -15px 15px; }
+    .photo-frame{ width:200px; }
+  }
+
+  /* ============================ PRINT (ပရင့်ထုတ်ရန်) ============================ */
+  @media print {
+    body { background:#fff !important; }
+    #landing,
+    .admin-toggle,
+    .admin-panel,
+    .edit-indicator,
+    .image-actions,
+    .modal-overlay,
+    .toast-wrap { display:none !important; }
+    #bookView {
+      display:flex !important;
+      padding:0; background:#fff !important;
+      min-height:auto;
+    }
+    .book { box-shadow:none !important; max-width:100%; }
+    .page { background:#fff !important; min-height:auto; }
+    .book::before, .book::after { display:none; }
+    .spine { background:#8b4513 !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================ ၁။ LANDING PAGE ============================ -->
+<div id="landing">
+  <div class="landing-content">
+    <div class="landing-seal">❦</div>
+    <h1>ဖိတ်ကြားလွှာ</h1>
+    <div class="eng-title">Invitation</div>
+    <button class="enter-btn" onclick="enterBook()">
+      <span>ဝင်ရောက်ကြည့်ရှုရန်</span>
+      <span class="arrow">→</span>
+    </button>
+    <p class="landing-hint">Click တစ်ချက်နှိပ်ပါ</p>
+  </div>
+</div>
+
+<!-- ============================ ၂။ BOOK VIEW ============================ -->
+<div id="bookView">
+  <div class="book">
+
+    <!-- ဘယ်ဘက် စာမျက်နှာ -->
+    <div class="page left">
+      <div class="frame">
+        <div class="left-content">
+          <div class="top-ornament">✦ ❦ ✦</div>
+          <div class="invitation-label" data-key="label">Invitation</div>
+          <h1 class="title" data-key="title">
+            စုပေါင်းမင်္ဂလာ<br>
+            အလှူတော်မင်္ဂလာ
+            <span class="accent">ဖိတ်ကြားလွှာ</span>
+          </h1>
+          <div class="ornament"><span class="ornament-icon">❦</span></div>
+
+          <!-- 🖼️ ဓာတ်ပုံနေရာ — Default ဖျောက်ထား (Admin မှ ထည့်မှသာ ပေါ်မည်) -->
+          <div class="photo-frame" id="photoFrame">
+            <div class="photo-inner">
+              <img id="invitationImage" alt="Invitation Photo">
+            </div>
+            <div class="photo-caption" data-key="imageCaption">ဖိတ်ကြားလွှာ အမှတ်တရဓာတ်ပုံ</div>
+          </div>
+          <div class="image-actions" id="imageActions"></div>
+
+          <p class="sub-info" data-key="subInfo">
+            ကြည်ညိုလေးမြတ်စွာဖြင့်<br>
+            ဖိတ်ကြားအပ်ပါသည်
+          </p>
+          <div class="seal" data-key="seal">ဖိတ်စာ<br>❦</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ကျောရိုး -->
+    <div class="spine"></div>
+
+    <!-- ညာဘက် စာမျက်နှာ -->
+    <div class="page right">
+      <div class="frame">
+        <div class="right-content">
+          <div>
+            <div class="letter-salutation" data-key="salutation">
+              နမော တဿ ဘဂဝတော အရဟတော သမ္မာသမ္ဗုဒ္ဓဿ
+            </div>
+            <div class="letter-body" data-key="body">
+              ပွဲတော်ငံဒေသူကြွယ်၊ ပညာရှင်၊ သီတဂူဗုဒ္ဓကလာယာ၊ ကိုရီးယားနိုင်ငံတော်၊ ပုဂံမြို့ဒေသူတော်များ၏ သဒ္ဒါတော်၊ အရှင်သူမြတ်တို့အား မိသားစုအများအပြားမှ ကြည်ညိုလေးမြတ်လျက် <span class="highlight">K.K မိန်းမတော်နှင့် ဆန္ဒဖြိုး</span> မိသားစုတို့မှ မဏ္ဍပ်အတွင်းမှ ဒကာ/ဒကာမ တို့မှ စုပေါင်းမင်္ဂလာအခမ်းအနား ပြုလုပ်ကြပါရန် ဖိတ်ကြားအပ်ပါသည်။
+            </div>
+
+            <div class="details">
+              <div class="detail-row">
+                <span class="label">ခုနှစ်၊ လ၊ ရက်</span>
+                <span class="value" data-key="date">၁၃၈၅ ခုနှစ်၊ နယုန်လဆန်း (၆)ရက်၊ သောကြာနေ့ (18.11.2023)</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">အချိန်</span>
+                <span class="value" data-key="time">နံနက် (၉:၀၀) နာရီ</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">နေရာ</span>
+                <span class="value" data-key="location">ရန်ကုန်တိုင်းဒေသကြီး၊ လှိုင်မြို့နယ်၊ လှိုင်တက္ကသိုလ်နယ်မြေ၊ ဒဂုံဧရာအဆင်အတွင်း ကျေးရွာကြီးလမ်း</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="signature" data-key="signature">
+            လေးစားစွာဖြင့်<br>
+            <span class="sign-line">ဖိတ်ကြားသူများ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================ TOAST ============================ -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- ============================ EDIT MODE INDICATOR ============================ -->
+<div class="edit-indicator" id="editIndicator">✏️ EDIT MODE - စာသားများကို နှိပ်၍ ပြင်နိုင်ပါသည်</div>
+
+<!-- ============================ ADMIN FLOATING BUTTON ============================ -->
+<button class="admin-toggle" id="adminToggle" onclick="openAdminPanel()" title="Admin">⚙</button>
+
+<!-- ============================ ADMIN PANEL ============================ -->
+<div class="admin-panel" id="adminPanel">
+  <h2>
+    ⚙ Admin Control
+    <button class="close-panel" onclick="closeAdminPanel()">✕</button>
+  </h2>
+
+  <div class="admin-section">
+    <h3>📝 Edit Mode</h3>
+    <div class="editor-toolbar" id="editorToolbar">
+      <div class="toolbar-title">✦ စာပိုဒ် / စာသားညှိရန် — စာသားတစ်ခုကို အရင်နှိပ်ပါ</div>
+      <div class="toolbar-row">
+        <button class="tool-btn" onclick="formatSelected('justifyLeft')">⬅ ဘယ်</button>
+        <button class="tool-btn" onclick="formatSelected('justifyCenter')">↔ အလယ်</button>
+        <button class="tool-btn" onclick="formatSelected('justifyRight')">➡ ညာ</button>
+        <button class="tool-btn" onclick="formatSelected('justifyFull')">☰ ညီ</button>
+        <button class="tool-btn" onclick="formatSelected('bold')"><b>B</b> Bold</button>
+        <button class="tool-btn" onclick="formatSelected('italic')"><i>I</i> Italic</button>
+      </div>
+      <div class="toolbar-row" style="margin-top:7px">
+        <select class="tool-select" id="fontSizeSelect" onchange="applyFontSize(this.value)">
+          <option value="">စာအရွယ်</option>
+          <option value="12px">12px</option><option value="14px">14px</option>
+          <option value="16px">16px</option><option value="18px">18px</option>
+          <option value="20px">20px</option><option value="24px">24px</option>
+          <option value="28px">28px</option><option value="32px">32px</option>
+        </select>
+        <select class="tool-select" id="lineHeightSelect" onchange="applyLineHeight(this.value)">
+          <option value="">စာကြောင်းအကွာ</option>
+          <option value="1.4">1.4</option><option value="1.6">1.6</option>
+          <option value="1.8">1.8</option><option value="2">2.0</option>
+          <option value="2.2">2.2</option><option value="2.5">2.5</option>
+        </select>
+        <button class="tool-btn" onclick="clearTextStyle()">↺ Style Reset</button>
+      </div>
+    </div>
+    <button class="admin-btn" id="editBtn" onclick="toggleEditMode()">
+      <span>✏️</span> <span id="editBtnText">Edit Mode ဖွင့်ရန်</span>
+    </button>
+    <button class="admin-btn primary" onclick="saveData()">
+      <span>💾</span> သိမ်းဆည်းရန် (Save)
+    </button>
+    <div class="status-msg" id="statusMsg"></div>
+  </div>
+
+  <!-- 🖼️ ဓာတ်ပုံ Control -->
+  <div class="admin-section">
+    <h3>🖼️ Photo Control</h3>
+    <button class="admin-btn primary" onclick="document.getElementById('imageInput').click()">
+      <span>📷</span> ဓာတ်ပုံ ထည့် / ပြောင်း
+    </button>
+    <button class="admin-btn" id="photoToggleBtn" onclick="togglePhotoVisibility()">
+      <span>👁️</span> ဓာတ်ပုံ မရှိသေးပါ
+    </button>
+    <button class="admin-btn danger" onclick="removeInvitationImage()">
+      <span>🗑️</span> ဓာတ်ပုံ ဖျက်ရန်
+    </button>
+    <div class="image-size-row">
+      <input id="imageWidth" type="number" min="120" max="600" step="10" placeholder="အကျယ် px" onchange="applyImageSize()">
+      <select id="imageFit" onchange="applyImageFit(this.value)">
+        <option value="cover">Cover (ဖြည့်)</option>
+        <option value="contain">Contain (အပြည့်)</option>
+      </select>
+    </div>
+    <img id="adminImagePreview" class="admin-image-preview" alt="Image Preview">
+    <div class="status-msg" id="imageStatus"></div>
+  </div>
+
+  <div class="admin-section">
+    <h3>💾 Backup</h3>
+    <button class="admin-btn" onclick="exportData()">
+      <span>📤</span> JSON Export (ဒေါင်းလုပ်)
+    </button>
+    <button class="admin-btn" onclick="document.getElementById('importFile').click()">
+      <span>📥</span> JSON Import (တင်သွင်း)
+    </button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+
+  <div class="admin-section">
+    <h3>🔒 Security</h3>
+    <button class="admin-btn" onclick="changePassword()">
+      <span>🔑</span> Password ပြောင်းရန်
+    </button>
+  </div>
+
+  <div class="admin-section">
+    <h3>⚠️ Danger Zone</h3>
+    <button class="admin-btn danger" onclick="resetData()">
+      <span>🔄</span> မူလအတိုင်း ပြန်ထားရန် (Reset)
+    </button>
+    <button class="admin-btn danger" onclick="logout()">
+      <span>🚪</span> ထွက်ရန် (Logout)
+    </button>
+  </div>
+</div>
+
+<!-- ============================ ဓာတ်ပုံ File Input (Hidden) ============================ -->
+<input type="file" id="imageInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
+
+<!-- ============================ LOGIN MODAL ============================ -->
+<div class="modal-overlay" id="loginModal">
+  <div class="login-modal">
+    <div class="lock-icon">🔒</div>
+    <h2>Admin Login</h2>
+    <p>Password ထည့်သွင်းပါ</p>
+    <input type="password" class="password-input" id="passwordInput" placeholder="••••••••" onkeypress="if(event.key==='Enter') doLogin()">
+    <div class="login-error" id="loginError">❌ Password မှားနေပါသည်</div>
+    <button class="login-btn" onclick="doLogin()">ဝင်ရောက်ရန်</button>
+    <button class="cancel-btn" onclick="closeLogin()">ပယ်ဖျက်</button>
+  </div>
+</div>
+
+<script>
+  /* ============================ STATE ============================ */
+  const DEFAULT_PASSWORD = 'admin123';
+  let editMode = false;
+  let isAdmin = false;
+  let selectedEditable = null;
+
+  /* ============================ LANDING ============================ */
+  function enterBook() {
+    const landing = document.getElementById('landing');
+    landing.classList.add('fade-out');
+    setTimeout(() => {
+      landing.style.display = 'none';
+      document.getElementById('bookView').classList.add('active');
+      document.getElementById('adminToggle').classList.add('visible');
+      loadData();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 800);
+  }
+
+  /* ============================ TOAST ============================ */
+  function showToast(msg, type = '') {
+    const wrap = document.getElementById('toastWrap');
+    if (!wrap) return;
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = msg;
+    wrap.appendChild(el);
+    setTimeout(() => {
+      el.classList.add('out');
+      setTimeout(() => el.remove(), 320);
+    }, 2400);
+  }
+
+  /* ============================ ADMIN PANEL ============================ */
+  function openAdminPanel() {
+    if (!isAdmin) {
+      document.getElementById('loginModal').classList.add('open');
+      setTimeout(() => document.getElementById('passwordInput').focus(), 300);
+    } else {
+      document.getElementById('adminPanel').classList.add('open');
+    }
+  }
+  function closeAdminPanel() {
+    document.getElementById('adminPanel').classList.remove('open');
+  }
+
+  /* ============================ LOGIN ============================ */
+  function doLogin() {
+    const input = document.getElementById('passwordInput').value;
+    const savedPwd = localStorage.getItem('invitationPassword') || DEFAULT_PASSWORD;
+    const errEl = document.getElementById('loginError');
+
+    if (input === savedPwd) {
+      isAdmin = true;
+      document.getElementById('loginModal').classList.remove('open');
+      document.getElementById('passwordInput').value = '';
+      errEl.classList.remove('show');
+      setTimeout(() => document.getElementById('adminPanel').classList.add('open'), 300);
+      showToast('🔓 Admin အဖြစ် ဝင်ရောက်ပြီးပါပြီ', 'success');
+    } else {
+      errEl.classList.add('show');
+      document.getElementById('passwordInput').value = '';
+      setTimeout(() => errEl.classList.remove('show'), 2500);
+    }
+  }
+
+  function closeLogin() {
+    document.getElementById('loginModal').classList.remove('open');
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('loginError').classList.remove('show');
+  }
+
+  function logout() {
+    isAdmin = false;
+    if (editMode) toggleEditMode();
+    closeAdminPanel();
+    showToast('🚪 Logout အောင်မြင်ပါသည်', 'success');
+  }
+
+  /* ============================ EDIT MODE ============================ */
+  function toggleEditMode() {
+    editMode = !editMode;
+    const editableEls = document.querySelectorAll('[data-key]');
+    editableEls.forEach(el => { el.contentEditable = editMode; });
+
+    const btn = document.getElementById('editBtn');
+    const btnText = document.getElementById('editBtnText');
+    const indicator = document.getElementById('editIndicator');
+    const toolbar = document.getElementById('editorToolbar');
+
+    if (editMode) {
+      btn.classList.add('active');
+      btnText.textContent = 'Edit Mode ပိတ်ရန်';
+      indicator.classList.add('active');
+      toolbar.classList.add('show');
+      editableEls.forEach(el => {
+        el.addEventListener('blur', autoSave);
+        el.addEventListener('click', selectEditable);
+      });
+      showToast('✏️ Edit Mode ဖွင့်ပြီးပါပြီ');
+    } else {
+      btn.classList.remove('active');
+      btnText.textContent = 'Edit Mode ဖွင့်ရန်';
+      indicator.classList.remove('active');
+      toolbar.classList.remove('show');
+      editableEls.forEach(el => el.classList.remove('selected-editable'));
+      selectedEditable = null;
+      saveData(true);
+      showToast('💾 Edit Mode ပိတ်ပြီး သိမ်းဆည်းပြီးပါပြီ', 'success');
+    }
+    renderImageActions();
+  }
+
+  /* ==================== TEXT ALIGNMENT / TYPOGRAPHY ==================== */
+  function selectEditable(e) {
+    if (!editMode) return;
+    document.querySelectorAll('[data-key]').forEach(el => el.classList.remove('selected-editable'));
+    selectedEditable = e.currentTarget;
+    selectedEditable.classList.add('selected-editable');
+  }
+
+  function formatSelected(command) {
+    if (!selectedEditable) {
+      showToast('✏️ ပြင်လိုသော စာသားကို အရင်နှိပ်ပါ', 'error');
+      return;
+    }
+    selectedEditable.focus();
+    document.execCommand(command, false, null);
+    saveData(true);
+  }
+
+  function applyFontSize(value) {
+    if (!selectedEditable || !value) return;
+    selectedEditable.style.fontSize = value;
+    saveData(true);
+  }
+
+  function applyLineHeight(value) {
+    if (!selectedEditable || !value) return;
+    selectedEditable.style.lineHeight = value;
+    saveData(true);
+  }
+
+  function clearTextStyle() {
+    if (!selectedEditable) return;
+    selectedEditable.style.fontSize = '';
+    selectedEditable.style.lineHeight = '';
+    selectedEditable.style.fontWeight = '';
+    selectedEditable.style.fontStyle = '';
+    selectedEditable.style.textAlign = '';
+    saveData(true);
+    showToast('↺ Style ပြန်လည်ရှင်းလင်းပြီးပါပြီ');
+  }
+
+  /* ==========================================================
+     🖼️ PHOTO SYSTEM  —  Default Hidden
+     ========================================================== */
+  function hasPhoto() {
+    return !!localStorage.getItem('invitationImage');
+  }
+  function isPhotoHidden() {
+    return localStorage.getItem('invitationImageHidden') === '1';
+  }
+
+  /* ဓာတ်ပုံ ပေါ်မပေါ် ဆုံးဖြတ်သည် — ပုံမရှိလျှင် လုံးဝ ဖျောက် */
+  function updatePhotoVisibility() {
+    const frame = document.getElementById('photoFrame');
+    const show = hasPhoto() && !isPhotoHidden();
+    frame.classList.toggle('visible', show);
+    renderImageActions();
+    updatePhotoToggleBtn();
+  }
+
+  /* Edit Mode အတွင်း ခလုတ်ငယ်များ ပြခြင်း */
+  function renderImageActions() {
+    const wrap = document.getElementById('imageActions');
+    if (!wrap) return;
+
+    if (!editMode) {
+      wrap.classList.remove('show');
+      wrap.innerHTML = '';
+      return;
+    }
+    wrap.classList.add('show');
+
+    if (!hasPhoto()) {
+      wrap.innerHTML =
+        '<button class="mini-btn" type="button" onclick="document.getElementById(\'imageInput\').click()">📷 ဓာတ်ပုံ ထည့်ရန်</button>';
+    } else {
+      const hidden = isPhotoHidden();
+      wrap.innerHTML =
+        '<button class="mini-btn" type="button" onclick="document.getElementById(\'imageInput\').click()">📷 ပြောင်းရန်</button>' +
+        '<button class="mini-btn" type="button" onclick="togglePhotoVisibility()">' +
+          (hidden ? '👁️ ပြရန်' : '🙈 ဖျောက်ရန်') +
+        '</button>' +
+        '<button class="mini-btn" type="button" onclick="removeInvitationImage()">🗑️ ဖျက်ရန်</button>';
+    }
+  }
+
+  /* Admin Panel ရှိ Toggle ခလုတ် အခြေအနေ */
+  function updatePhotoToggleBtn() {
+    const btn = document.getElementById('photoToggleBtn');
+    if (!btn) return;
+    if (!hasPhoto()) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>👁️</span> ဓာတ်ပုံ မရှိသေးပါ';
+    } else if (isPhotoHidden()) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>👁️</span> ဓာတ်ပုံ ပြရန်';
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = '<span>🙈</span> ဓာတ်ပုံ ဖျောက်ရန်';
+    }
+  }
+
+  /* ဓာတ်ပုံ ဖျောက် / ပြ */
+  function togglePhotoVisibility() {
+    if (!hasPhoto()) {
+      showToast('📷 ဓာတ်ပုံ အရင်ထည့်ပါ', 'error');
+      return;
+    }
+    const wasHidden = isPhotoHidden();
+    localStorage.setItem('invitationImageHidden', wasHidden ? '0' : '1');
+    updatePhotoVisibility();
+    showToast(wasHidden ? '👁️ ဓာတ်ပုံ ပြပြီးပါပြီ' : '🙈 ဓာတ်ပုံ ဖျောက်ပြီးပါပြီ', 'success');
+  }
+
+  /* ဓာတ်ပုံ တင်သွင်းခြင်း */
+  function handleImageUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      showImageStatus('❌ Image file ပဲ ရွေးပါ', 'error');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showImageStatus('❌ ပုံအရွယ်အစား 5MB အောက်ဖြစ်ရပါမယ်', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const data = e.target.result;
+      try {
+        localStorage.setItem('invitationImage', data);
+        localStorage.setItem('invitationImageHidden', '0'); // အသစ်တင်လျှင် အလိုအလျောက် ပြ
+      } catch (err) {
+        showImageStatus('❌ Storage ပြည့်နေပါသည် (ပုံအရွယ်လျှော့ပါ)', 'error');
+        return;
+      }
+      loadImage();
+      loadImageSettings();
+      showImageStatus('✅ ပုံထည့်ပြီးပါပြီ', 'success');
+      showToast('🖼️ ဓာတ်ပုံ ထည့်ပြီးပါပြီ', 'success');
+      event.target.value = '';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* ဓာတ်ပုံ ဖျက်ခြင်း — လုံးဝ ပြန်ဖျောက် */
+  function removeInvitationImage() {
+    localStorage.removeItem('invitationImage');
+    localStorage.removeItem('invitationImageHidden');
+    localStorage.removeItem('invitationImageStyle');
+
+    const img = document.getElementById('invitationImage');
+    const preview = document.getElementById('adminImagePreview');
+    const frame = document.getElementById('photoFrame');
+
+    img.removeAttribute('src');
+    img.style.objectFit = '';
+    frame.style.width = '';
+    frame.classList.remove('visible');
+
+    preview.removeAttribute('src');
+    preview.style.display = 'none';
+
+    document.getElementById('imageWidth').value = '';
+    document.getElementById('imageFit').value = 'cover';
+
+    updatePhotoVisibility();
+    showImageStatus('🗑️ ပုံဖျက်ပြီးပါပြီ', 'success');
+    showToast('🗑️ ဓာတ်ပုံ ဖျက်ပြီးပါပြီ', 'success');
+  }
+
+  /* ဓာတ်ပုံ Load */
+  function loadImage() {
+    const data = localStorage.getItem('invitationImage');
+    const img = document.getElementById('invitationImage');
+    const preview = document.getElementById('adminImagePreview');
+
+    if (data) {
+      img.src = data;
+      preview.src = data;
+      preview.style.display = 'block';
+    } else {
+      img.removeAttribute('src');
+      preview.removeAttribute('src');
+      preview.style.display = 'none';
+    }
+    updatePhotoVisibility();
+  }
+
+  /* အရွယ်အစား */
+  function applyImageSize() {
+    const w = parseInt(document.getElementById('imageWidth').value, 10);
+    const frame = document.getElementById('photoFrame');
+    if (w >= 120 && w <= 600) frame.style.width = w + 'px';
+    saveImageSettings();
+  }
+
+  function applyImageFit(v) {
+    document.getElementById('invitationImage').style.objectFit = v || 'cover';
+    saveImageSettings();
+  }
+
+  function saveImageSettings() {
+    const frame = document.getElementById('photoFrame');
+    const img = document.getElementById('invitationImage');
+    localStorage.setItem('invitationImageStyle', JSON.stringify({
+      width: frame.style.width || '',
+      fit: img.style.objectFit || 'cover'
+    }));
+  }
+
+  function loadImageSettings() {
+    try {
+      const s = JSON.parse(localStorage.getItem('invitationImageStyle') || '{}');
+      const frame = document.getElementById('photoFrame');
+      const img = document.getElementById('invitationImage');
+      if (s.width) frame.style.width = s.width;
+      if (s.fit) img.style.objectFit = s.fit;
+      const w = parseInt(s.width, 10);
+      if (w) document.getElementById('imageWidth').value = w;
+      document.getElementById('imageFit').value = s.fit || 'cover';
+    } catch (e) {}
+  }
+
+  function showImageStatus(msg, type) {
+    const el = document.getElementById('imageStatus');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'status-msg ' + type;
+    setTimeout(() => el.className = 'status-msg', 2500);
+  }
+
+  function autoSave() {
+    if (editMode) saveData(true);
+  }
+
+  /* ============================ SAVE / LOAD ============================ */
+  function saveData(silent = false) {
+    const data = {};
+    document.querySelectorAll('[data-key]').forEach(el => {
+      data[el.dataset.key] = el.innerHTML;
+    });
+    try {
+      localStorage.setItem('invitationData', JSON.stringify(data));
+      if (!silent) {
+        showStatus('✅ သိမ်းဆည်းပြီးပါပြီ', 'success');
+        showToast('💾 သိမ်းဆည်းပြီးပါပြီ', 'success');
+      }
+    } catch (e) {
+      showStatus('❌ သိမ်းဆည်းမှု မအောင်မြင်ပါ', 'error');
+      showToast('❌ သိမ်းဆည်းမှု မအောင်မြင်ပါ', 'error');
+    }
+  }
+
+  function loadData() {
+    loadImageSettings();
+    loadImage();
+    const saved = localStorage.getItem('invitationData');
+    if (!saved) { renderImageActions(); return; }
+    try {
+      const data = JSON.parse(saved);
+      document.querySelectorAll('[data-key]').forEach(el => {
+        if (data[el.dataset.key] !== undefined) {
+          el.innerHTML = data[el.dataset.key];
+        }
+      });
+    } catch (e) { console.warn('Load failed', e); }
+    renderImageActions();
+  }
+
+  function resetData() {
+    if (!confirm('⚠️ သိမ်းထားတဲ့ data အားလုံး ဖျက်ပြီး မူလအတိုင်း ပြန်ထားမှာ သေချာပါသလား?')) return;
+    localStorage.removeItem('invitationData');
+    localStorage.removeItem('invitationImage');
+    localStorage.removeItem('invitationImageHidden');
+    localStorage.removeItem('invitationImageStyle');
+    location.reload();
+  }
+
+  /* ============================ EXPORT / IMPORT ============================ */
+  function exportData() {
+    const payload = {
+      invitationData: JSON.parse(localStorage.getItem('invitationData') || '{}'),
+      invitationImage: localStorage.getItem('invitationImage') || '',
+      invitationImageHidden: localStorage.getItem('invitationImageHidden') || '0',
+      invitationImageStyle: JSON.parse(localStorage.getItem('invitationImageStyle') || '{}')
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'invitation-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showStatus('📤 Export ပြီးပါပြီ', 'success');
+    showToast('📤 Export ပြီးပါပြီ', 'success');
+  }
+
+  function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (imported.invitationData) {
+          localStorage.setItem('invitationData', JSON.stringify(imported.invitationData));
+          localStorage.setItem('invitationImage', imported.invitationImage || '');
+          localStorage.setItem('invitationImageHidden', imported.invitationImageHidden || '0');
+          localStorage.setItem('invitationImageStyle', JSON.stringify(imported.invitationImageStyle || {}));
+        } else {
+          localStorage.setItem('invitationData', JSON.stringify(imported));
+        }
+        showStatus('📥 Import အောင်မြင်ပါသည် - Reload ဖြစ်ပါမည်', 'success');
+        showToast('📥 Import အောင်မြင်ပါသည်', 'success');
+        setTimeout(() => location.reload(), 1200);
+      } catch (err) {
+        showStatus('❌ File ပုံစံ မမှန်ပါ', 'error');
+        showToast('❌ File ပုံစံ မမှန်ပါ', 'error');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  /* ============================ PASSWORD ============================ */
+  function changePassword() {
+    const current = prompt('လက်ရှိ Password ထည့်ပါ:');
+    if (!current) return;
+    const savedPwd = localStorage.getItem('invitationPassword') || DEFAULT_PASSWORD;
+    if (current !== savedPwd) {
+      showStatus('❌ လက်ရှိ Password မှားနေပါသည်', 'error');
+      return;
+    }
+    const newPwd = prompt('Password အသစ် ထည့်ပါ (အနည်းဆုံး ၄ လုံး):');
+    if (!newPwd || newPwd.length < 4) {
+      showStatus('❌ Password သည် အနည်းဆုံး ၄ လုံး ရှိရပါမည်', 'error');
+      return;
+    }
+    const confirmPwd = prompt('Password အသစ် ထပ်မံ အတည်ပြုပါ:');
+    if (newPwd !== confirmPwd) {
+      showStatus('❌ Password နှစ်ခု မတူညီပါ', 'error');
+      return;
+    }
+    localStorage.setItem('invitationPassword', newPwd);
+    showStatus('✅ Password ပြောင်းပြီးပါပြီ', 'success');
+    showToast('🔑 Password ပြောင်းပြီးပါပြီ', 'success');
+  }
+
+  /* ============================ STATUS ============================ */
+  function showStatus(msg, type) {
+    const el = document.getElementById('statusMsg');
+    el.textContent = msg;
+    el.className = 'status-msg ' + type;
+    setTimeout(() => { el.className = 'status-msg'; }, 3000);
+  }
+
+  /* ============================ KEYBOARD SHORTCUTS ============================ */
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's' && isAdmin) {
+      e.preventDefault();
+      saveData();
+    }
+    if (e.key === 'Escape') {
+      closeAdminPanel();
+      closeLogin();
+    }
+  });
+
+  /* ============================ INIT ============================ */
+  window.addEventListener('DOMContentLoaded', () => {
+    updatePhotoToggleBtn();
+  });
+</script>
+
+</body>
+</html>
